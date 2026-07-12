@@ -99,15 +99,19 @@ section{padding-block:clamp(4.5rem,10vw,7rem)}
 
 /* ═══ TEXTURE — grille de points + grain (readme : "faint dot-grid grain … adds texture") ═══ */
 .dots{position:relative}
+/* La grille ÉTAIT là sur toutes les sections — mais à .05 d'opacité avec un masque qui
+   l'effaçait dès 80% du rayon, elle ne se voyait que sur le hero (section courte, centrée).
+   Sur les sections HAUTES, tout le contenu tombait dans la zone effacée. Corrigé : opacité
+   remontée + masque qui ne mange plus que les tout derniers bords. */
 .dots::before{
   content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
-  background-image:radial-gradient(circle, rgba(30,27,24,.05) 1px, transparent 1px);
-  background-size:22px 22px;
-  -webkit-mask-image:radial-gradient(ellipse 92% 75% at 50% 40%, #000 25%, transparent 80%);
-  mask-image:radial-gradient(ellipse 92% 75% at 50% 40%, #000 25%, transparent 80%);
+  background-image:radial-gradient(circle, rgba(30,27,24,.085) 1px, transparent 1px);
+  background-size:24px 24px;
+  -webkit-mask-image:linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+  mask-image:linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
 }
 /* sur les surfaces sable/blanches, la grille est un cran plus discrète */
-.system.dots::before,.bet.dots::before{background-image:radial-gradient(circle, rgba(30,27,24,.04) 1px, transparent 1px)}
+.system.dots::before,.bet.dots::before{background-image:radial-gradient(circle, rgba(30,27,24,.065) 1px, transparent 1px)}
 /* Grain fin, global, sur une couche fixe et non-cliquable (règle perf : jamais sur un conteneur qui scrolle) */
 .grain{
   position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.035;
@@ -241,23 +245,48 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
 /* variante ronde : juste une icône qui flotte (IA, réseaux) */
 .float--ico{padding:0;width:44px;height:44px;justify-content:center;border-radius:14px}
 .float--ico .i{width:19px;height:19px;color:var(--orange)}
+/* Pastille "logo de marque" : le glyphe porte ses VRAIES couleurs (elles sont dans le
+   symbole SVG, pas héritées). Une seule ombre douce, aucun contour orange — on veut que
+   l'œil reconnaisse Instagram/YouTube, pas qu'il voie une décoration de plus. */
+.float--brand{background:#fff;box-shadow:var(--edge),var(--shadow-md)}
+.float--brand .i{width:21px;height:21px}
 .float--dark{background:var(--night);color:var(--ink-on-dark)}
 .float--dark .i{color:var(--orange)}
 
-.float--1{top:9%;left:-6%}
-.float--2{top:36%;right:-8%}
-.float--3{bottom:22%;left:-10%}
-.float--4{top:20%;right:4%}
-.float--5{bottom:8%;right:-2%}
+.float--1{top:9%;left:-4%}
+.float--2{top:36%;right:-5%}
+.float--3{bottom:22%;left:-7%}
+.float--4{top:20%;right:6%}
+.float--5{bottom:10%;right:2%}
+.float--6{bottom:30%;left:4%}
 
 .js .float{animation:bob 5.5s ease-in-out infinite;will-change:transform}
 .js .float--2{animation-delay:-1.8s;animation-duration:6.4s}
 .js .float--3{animation-delay:-3.4s;animation-duration:6s}
 .js .float--4{animation-delay:-2.6s;animation-duration:7s}
 .js .float--5{animation-delay:-4.6s;animation-duration:5.8s}
+.js .float--6{animation-delay:-3.1s;animation-duration:7.4s}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(var(--rot,0deg))}
                50%{transform:translateY(-10px) rotate(var(--rot,0deg))}}
 @media(max-width:980px){.float{display:none}}
+
+/* ── Flottants d'AMBIANCE sur les autres sections (demande Tobias).
+   ⚠️ Ils étaient ancrés au bord de l'ÉCRAN (left:2.2%) — donc collés au bord sur un grand
+   écran, loin du contenu, et l'œil ne les reliait à rien. Ils sont maintenant ancrés au
+   bord de la COLONNE DE LECTURE : calc(50% - 604px) = la demi-largeur du .wrap (560px)
+   + un décrochage. Ils suivent le texte quelle que soit la largeur de l'écran.
+   Sous 1240px il n'y a plus de marge → ils disparaissent plutôt que de chevaucher.
+   pointer-events:none : ils ne volent aucun clic. ── */
+.sfloat{position:absolute;z-index:1;pointer-events:none;opacity:.92}
+.sfloat--a{top:10%;   left:calc(50% - 604px)}
+.sfloat--b{top:30%;   right:calc(50% - 596px)}
+.sfloat--c{bottom:18%;left:calc(50% - 590px)}
+.sfloat--d{bottom:28%;right:calc(50% - 608px)}
+.js .sfloat{animation:bob 6.8s ease-in-out infinite;will-change:transform}
+.js .sfloat--b{animation-delay:-2.2s;animation-duration:7.6s}
+.js .sfloat--c{animation-delay:-4.1s;animation-duration:6.2s}
+.js .sfloat--d{animation-delay:-1.3s;animation-duration:8.1s}
+@media(max-width:1240px){.sfloat{display:none}}
 
 @media(max-width:900px){
   .hero{min-height:auto;padding-block:6.5rem 3rem}
@@ -266,10 +295,24 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
   .portrait img{max-width:250px}
 }
 
-/* ═══ 2. LE SYSTÈME ═══ */
+/* ═══ 2. LE SYSTÈME — TOUT est centré (demande Tobias).
+   C'est la section la plus dense de la page : 39 agents, 6 capacités, un organigramme.
+   Centrée, elle donne à l'œil UN axe à suivre au lieu de deux bords. ═══ */
 .system{background:var(--paper-2);border-block:1px solid var(--hairline)}
-.system__head{max-width:44rem;margin-bottom:2rem}
+.system__head{max-width:50rem;margin-inline:auto;margin-bottom:2rem;text-align:center}
 .system__head h2{margin-bottom:1rem}
+.system .eyebrow{justify-content:center;width:100%}
+.system__head .lead{margin-inline:auto}
+.system .can{max-width:58rem;margin-inline:auto}
+/* la SECTION est centrée, mais le texte DANS une carte reste ferré à gauche :
+   une puce à cocher + 2 lignes centrées, ça ne se lit pas, ça se déchiffre. */
+.system .can__i{text-align:left}
+.system .ambition{max-width:46rem;margin-inline:auto;text-align:center}
+.system .counts{justify-content:center}
+.system .org-toggle-wrap{display:flex;justify-content:center}
+.system .org-role{justify-content:center;text-align:center}
+.system__bridge{align-items:center;text-align:center}
+.system__bridge p{margin-inline:auto}
 
 .counts{display:flex;flex-wrap:wrap;gap:1.5rem 2.75rem;padding:1.4rem 0;margin-bottom:1.75rem;
   border-block:1px solid var(--hairline)}
@@ -294,13 +337,16 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
 
 .org-wrap{overflow-x:auto;overflow-y:hidden;padding:.5rem 0 1.25rem;-webkit-overflow-scrolling:touch;
   scrollbar-width:thin;scrollbar-color:var(--hairline-2) transparent}
-.org{width:100%;min-width:780px;height:auto}
+.org{width:100%;min-width:780px;max-width:1018px;height:auto;margin-inline:auto;display:block}
 .js .org-wrap.is-idle .n,.js .org-wrap.is-idle .e{opacity:0}
 .org .n{cursor:pointer;transform-box:fill-box;transform-origin:center;transition:opacity .25s var(--ease)}
-.org .n rect{transition:stroke .18s var(--ease),fill .18s var(--ease)}
-.org .n:hover rect,.org .n:focus-visible rect{stroke:var(--orange);stroke-width:1.8}
+/* Les nœuds sont SOMBRES (générés par gen_org_svg.py). Au survol, on ne peut donc plus
+   jouer sur le contour seul : on ajoute une lueur orange, visible sur du noir. */
+.org .n rect{transition:stroke .18s var(--ease),fill .18s var(--ease),filter .18s var(--ease)}
+.org .n:hover rect,.org .n:focus-visible rect{stroke:var(--orange);stroke-width:2;
+  filter:drop-shadow(0 0 7px rgba(233,106,43,.55))}
 .org .e{transition:stroke-opacity .18s var(--ease),stroke-width .18s var(--ease)}
-.org .n.lit rect{stroke:var(--orange);stroke-width:1.8}
+.org .n.lit rect{stroke:var(--orange);stroke-width:2;filter:drop-shadow(0 0 7px rgba(233,106,43,.55))}
 .org .e.lit{stroke-opacity:1;stroke-width:2}
 .org.has-lit .n:not(.lit){opacity:.35}
 .org.has-lit .e:not(.lit){stroke-opacity:.1}
@@ -315,7 +361,8 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
 .org-role b{color:var(--ink);font-weight:600}
 
 .system__bridge{margin-top:2.25rem;padding-top:1.75rem;border-top:1px solid var(--hairline);
-  display:flex;flex-wrap:wrap;gap:1rem 2rem;align-items:center;justify-content:space-between}
+  display:flex;flex-wrap:wrap;gap:1rem 2rem;align-items:center;justify-content:center;
+  flex-direction:column;text-align:center}
 .system__bridge p{font-size:var(--t-lead);max-width:38ch}
 
 /* ═══ 3. CE QU'IL A PRODUIT ═══ */
@@ -336,27 +383,23 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
 .piece__body p{color:var(--ink-2);margin-bottom:1.1rem;max-width:46ch}
 .piece__links{display:flex;flex-wrap:wrap;gap:1.25rem;margin-top:1.25rem}
 
-/* ── La bande Oryzon : le travail EST la preuve, donc on le montre en grand.
-   Défilement horizontal + scroll-snap : sur mobile, une grille de 4 vignettes
-   rendrait chaque visuel illisible — or c'est le visuel qui vend. ── */
-/* min-width:0 — SANS ÇA, RIEN NE MARCHE. Un enfant de grille a min-width:auto : il refuse
-   de descendre sous la largeur de son contenu (4×300px), donc il déborde la page au lieu
-   de déclencher son overflow-x. C'est la cause n°1 des scrolls horizontaux fantômes. */
-.strip{margin-top:2.5rem;grid-column:1/-1;min-width:0}
-.strip__rail{display:flex;gap:1.1rem;overflow-x:auto;padding:.5rem .25rem 1.25rem;
-  scroll-snap-type:x mandatory;scrollbar-width:thin;
-  scrollbar-color:var(--hairline-2) transparent;
-  /* les visuels se fondent dans le papier au bord, au lieu d'être tranchés net */
-  -webkit-mask-image:linear-gradient(to right,transparent,#000 2.5%,#000 97.5%,transparent);
-  mask-image:linear-gradient(to right,transparent,#000 2.5%,#000 97.5%,transparent)}
-.strip__rail::-webkit-scrollbar{height:6px}
-.strip__rail::-webkit-scrollbar-thumb{background:var(--hairline-2);border-radius:var(--r-pill)}
-.strip__rail img{flex:0 0 auto;width:min(300px,72vw);height:auto;aspect-ratio:1;object-fit:cover;
-  border-radius:var(--r-lg);box-shadow:var(--edge),var(--shadow-lg);scroll-snap-align:center;
-  transition:transform .28s var(--ease),box-shadow .28s var(--ease)}
-.strip__rail img:hover{transform:translateY(-3px) scale(1.012);box-shadow:var(--edge),var(--shadow-xl)}
-.strip figcaption{font-size:var(--t-caption);color:var(--ink-3);padding-left:.25rem}
-.strip .muted{opacity:.62}
+/* ── Oryzon : une PLANCHE 2×2, pas une bande.
+   Même emprise que les captures Webivis/StudyForge — l'œil lit les 3 projets au même rythme.
+   2×2 plutôt que 4 en ligne : dans une colonne de ~480px, quatre carrés font 110px chacun —
+   le visuel devient illisible, et c'est LE VISUEL qui vend Oryzon. En 2×2 : ~230px. ── */
+.sheet{display:grid;grid-template-columns:1fr 1fr;gap:clamp(.55rem,1.1vw,.9rem);margin:0}
+.sheet img{width:100%;height:auto;aspect-ratio:1;object-fit:cover;
+  border-radius:var(--r-md);box-shadow:var(--edge),var(--shadow-md);
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+/* on ANNULE le lift groupé de .piece__media : ici chaque visuel se lève seul */
+.piece__media.sheet:hover img{transform:none;box-shadow:var(--edge),var(--shadow-md)}
+.sheet img:hover{transform:translateY(-4px) scale(1.02);box-shadow:var(--edge),var(--shadow-xl)}
+
+/* ── Les titres de projet se noyaient : plus gros, plus gras, ancrés par un trait orange. ── */
+.piece__body h3{font-size:clamp(1.9rem,1.35rem + 1.7vw,2.55rem);font-weight:800;
+  letter-spacing:-.022em;line-height:1.08;margin-bottom:.6rem;
+  display:inline-block;padding-bottom:.35rem;
+  border-bottom:3px solid var(--orange)}
 
 /* ═══ 4. LE PARI — CENTRÉ, titre RÉDUIT (il criait, surtout sur mobile) ═══ */
 .bet{background:var(--card);border-block:1px solid var(--hairline)}
@@ -368,12 +411,18 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
 .bet p{font-size:var(--t-lead);color:var(--ink-2);margin-bottom:1.1rem;max-width:50ch;margin-inline:auto}
 .bet p:last-child{margin-bottom:0}
 
-/* ═══ 5. MAINTENANT ═══ */
+/* ═══ 5. MAINTENANT ═══
+   « Maintenant » et la carte noire forment UNE paire : l'état des lieux, puis l'invitation.
+   Deux sections pleines les séparaient par ~14rem (leurs padding qui s'additionnent) — l'œil
+   perdait le lien. On rapproche les deux cartes ; le reste de la page garde son rythme. */
+.now{padding-bottom:clamp(1.5rem,3vw,2.25rem)}
+.offer{padding-top:clamp(1.5rem,3vw,2.25rem)}
 .now__card{background:var(--card-tint);border-radius:var(--r-xl);
   padding:clamp(1.75rem,3.5vw,2.75rem);max-width:54rem;margin-inline:auto;
   box-shadow:var(--edge),var(--shadow-md)}
 .now .eyebrow{justify-content:center;width:100%}
-.now__head{text-align:center;margin-bottom:1.6rem}
+.now__card{text-align:center}          /* l'eyebrow était centré, la date restait à gauche */
+.now__list{text-align:left}            /* …mais la liste, elle, se lit alignée à gauche */
 .now__date{display:inline-flex;align-items:center;gap:.5rem;font-size:var(--t-caption);font-weight:600;
   letter-spacing:.08em;text-transform:uppercase;color:var(--orange-txt);
   background:var(--orange-soft);padding:.4rem .8rem;border-radius:var(--r-pill);margin-bottom:1.4rem}
@@ -456,10 +505,12 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
 }
 
 /* ═══ BLOC RÉSEAUX (dans la carte nuit) — ordre = importance réelle ═══ */
-.socials{display:flex;flex-wrap:wrap;gap:.7rem;justify-content:center;margin-top:.25rem}
+/* gap et padding resserrés : à 1,35rem, LinkedIn passait seul à la ligne (3+1),
+   et un 4e bouton orphelin se lit comme une erreur, pas comme une hiérarchie. */
+.socials{display:flex;flex-wrap:wrap;gap:.55rem;justify-content:center;margin-top:.25rem}
 .social{
-  display:inline-flex;align-items:center;gap:.6rem;
-  padding:.85rem 1.35rem;border-radius:var(--r-pill);
+  display:inline-flex;align-items:center;gap:.55rem;
+  padding:.8rem 1.05rem;border-radius:var(--r-pill);
   background:rgba(251,247,240,.07);color:var(--ink-on-dark);
   box-shadow:inset 0 0 0 1px rgba(251,247,240,.14);
   text-decoration:none;font-weight:600;font-size:.98rem;white-space:nowrap;
@@ -469,8 +520,16 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
   box-shadow:inset 0 0 0 1px rgba(251,247,240,.26),0 10px 22px -10px rgba(0,0,0,.6)}
 .social:active{transform:translateY(1px) scale(.99)}
 .social .i{width:19px;height:19px;flex:none}
-/* le premier réseau = l'orange plein (UN seul CTA orange par vue) */
-.social--first{background:var(--orange);color:#fff;box-shadow:0 8px 24px -10px rgba(233,106,43,.6)}
+/* Le VRAI logo de la plateforme, posé sur une pastille blanche : les glyphes de marque
+   portent leurs couleurs propres (dégradé Instagram, rouge YouTube…) — sur un fond nuit
+   ou orange, ils se noieraient. La pastille les isole et les rend nets partout. */
+.social .i--brand{width:26px;height:26px;padding:3px;background:#fff;border-radius:7px}
+.social--soon .i--brand{filter:grayscale(1)}   /* un logo en couleurs dirait "c'est ouvert" */
+
+/* le premier réseau = l'orange plein (UN seul CTA orange par vue)
+   ⚠️ texte ANTHRACITE, pas blanc : #fff sur #E96A2B = 3,20:1 → ÉCHEC AA sur du 15,7px.
+   Anthracite = 5,77:1 ✅ — même arbitrage que le CTA du hero et que la racine de l'org-chart. */
+.social--first{background:var(--orange);color:var(--night);box-shadow:0 8px 24px -10px rgba(233,106,43,.6)}
 .social--first:hover{background:var(--orange);box-shadow:0 16px 32px -12px rgba(233,106,43,.7)}
 /* un réseau pas encore ouvert : on le montre, on ne ment pas, on ne lie pas dans le vide */
 .social--soon{opacity:.42;pointer-events:none}
