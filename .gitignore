@@ -1,3 +1,15 @@
+# ⛔ SECRETS — CE REPO EST PUBLIC. Une clé commitée ici est une clé PUBLIÉE.
+# BREVO_API_KEY vit dans les variables d'environnement Vercel, jamais dans un fichier.
+# Ces 3 lignes manquaient : le trou n'était pas théorique, la clé Brevo allait arriver.
+.env
+.env.*
+!.env.example
+
+# Doc éditoriale INTERNE — elle vit dans le vault privé
+# (02_STATE/projects/personal_hub/CONTENT_EDITORIAL.md).
+# Servie publiquement, elle exposait des notes qui n'ont rien à faire sur le web.
+CONTENT.md
+
 .vercel
 .DS_Store
 node_modules

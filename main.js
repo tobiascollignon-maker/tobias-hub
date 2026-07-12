@@ -208,7 +208,9 @@
           throw new Error(error || 'Envoi impossible pour le moment.');
         }
         form.reset();
-        say('ok', 'C’est bon. Regarde ta boîte mail.');
+        // Double opt-in : rien n'est encore acquis tant qu'elle n'a pas cliqué.
+        // Lui dire "c'est bon" serait faux — elle attendrait un pack qui n'arrivera pas.
+        say('ok', 'Presque : ouvre ta boîte mail et clique sur le lien de confirmation.');
       } catch (err) {
         say('err', err.message);
       } finally {
