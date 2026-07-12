@@ -166,8 +166,16 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
   text-decoration:none;cursor:pointer;white-space:nowrap;
   transition:transform .18s var(--ease),background-color .18s var(--ease),box-shadow .18s var(--ease);
 }
-/* UN seul CTA orange par vue. Blanc sur #E96A2B = 3.55:1 → on force 17px/700 (AA grand texte). */
-.btn--primary{background:var(--orange);color:#fff;font-size:1.0625rem;font-weight:700;
+/* UN seul CTA orange par vue.
+   ⛔ TEXTE ANTHRACITE, JAMAIS BLANC — et le commentaire précédent se trompait deux fois :
+      · il annonçait 3.55:1 ; la vraie mesure est **3.20:1**
+      · il s'auto-rassurait avec « 17px/700 = AA grand texte » : FAUX. Le seuil « grand texte »
+        est 18.66px en gras (14pt). À 17px, c'est le seuil normal qui s'applique → 4.5:1 requis.
+   C'était donc le CTA PRINCIPAL de la page (hero + barre mobile collante) qui échouait AA —
+   précisément le bouton qu'on lit sur un téléphone, dehors, en plein soleil.
+   Anthracite sur l'orange exact = **5.77:1** ✅. Le hex de marque reste intact, et c'est plus
+   distinctif que l'orange-texte-blanc que tout le monde produit. */
+.btn--primary{background:var(--orange);color:var(--night);font-size:1.0625rem;font-weight:700;
   box-shadow:var(--shadow-md),0 8px 24px -10px rgba(233,106,43,.55)}
 .btn--primary:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg),0 16px 34px -12px rgba(233,106,43,.6)}
 .btn--primary:active{transform:translateY(1px) scale(.99)}
