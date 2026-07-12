@@ -249,18 +249,18 @@ p .acc, p .acc-s, li .acc, li .acc-s{color:var(--orange-txt)}
 
 /* ═══ 1. HERO ═══ */
 .hero{min-height:100dvh;display:flex;align-items:center;padding-block:8rem 4rem}
-.hero .wrap{display:grid;grid-template-columns:1.12fr .88fr;gap:clamp(1.5rem,4vw,3rem);align-items:center}
+.hero .wrap{display:grid;grid-template-columns:1.06fr .94fr;gap:clamp(1.5rem,4vw,3rem);align-items:center}
 .hero h1{margin-bottom:1.5rem}
 .hero .lead{margin-bottom:1.75rem}
 .hero__cta{display:flex;flex-wrap:wrap;gap:.9rem 1.3rem;align-items:center;margin-bottom:1.5rem}
 .hero__meta{display:flex;flex-wrap:wrap;gap:.5rem}
 
 /* Portrait DÉTOURÉ — pas de cadre, pas de carte : il flotte sur le papier. */
-.portrait{position:relative;display:grid;place-items:end center;min-height:min(66vh,560px)}
+.portrait{position:relative;display:grid;place-items:end center;min-height:min(72vh,620px)}
 /* Le sujet est détouré au niveau de la poitrine → sans masque il se termine par une ligne
    droite qui hurle « image découpée ». Le dégradé le fait se DISSOUDRE dans le papier. */
 .portrait img{
-  width:100%;max-width:430px;position:relative;z-index:2;
+  width:100%;max-width:540px;position:relative;z-index:2;
   filter:drop-shadow(0 22px 38px rgba(58,42,22,.18));
   -webkit-mask-image:linear-gradient(to bottom,#000 76%,rgba(0,0,0,.55) 90%,transparent 100%);
   mask-image:linear-gradient(to bottom,#000 76%,rgba(0,0,0,.55) 90%,transparent 100%);
