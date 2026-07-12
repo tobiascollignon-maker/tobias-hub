@@ -20,4 +20,4 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-Sitemap: https://tobiascollignon.vercel.app/sitemap.xml
+Sitemap: https://tobias-hub.vercel.app/sitemap.xml

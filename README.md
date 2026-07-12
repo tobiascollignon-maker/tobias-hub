@@ -4,7 +4,7 @@ La page perso de Tobias Collignon — le lien qui vit dans ses bios.
 **Conçue et codée par son système d'agents.** C'est pour ça que ce repo est public : la page
 affirme que le système existe, et voici sa sortie.
 
-→ https://tobiascollignon.vercel.app
+→ https://tobias-hub.vercel.app
 
 ---
 

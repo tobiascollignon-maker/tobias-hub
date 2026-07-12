@@ -100,12 +100,14 @@ section{padding-block:clamp(4.5rem,10vw,7rem)}
 /* ═══ TEXTURE — grille de points + grain (readme : "faint dot-grid grain … adds texture") ═══ */
 .dots{position:relative}
 .dots::before{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background-image:radial-gradient(circle, rgba(30,27,24,.055) 1px, transparent 1px);
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle, rgba(30,27,24,.05) 1px, transparent 1px);
   background-size:22px 22px;
-  -webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 35%, #000 30%, transparent 78%);
-  mask-image:radial-gradient(ellipse 90% 70% at 50% 35%, #000 30%, transparent 78%);
+  -webkit-mask-image:radial-gradient(ellipse 92% 75% at 50% 40%, #000 25%, transparent 80%);
+  mask-image:radial-gradient(ellipse 92% 75% at 50% 40%, #000 25%, transparent 80%);
 }
+/* sur les surfaces sable/blanches, la grille est un cran plus discrète */
+.system.dots::before,.bet.dots::before{background-image:radial-gradient(circle, rgba(30,27,24,.04) 1px, transparent 1px)}
 /* Grain fin, global, sur une couche fixe et non-cliquable (règle perf : jamais sur un conteneur qui scrolle) */
 .grain{
   position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.035;
@@ -232,18 +234,30 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
 /* Pas d'ombre au sol : le sujet se fond dans le papier par le bas, il ne "pose" pas dessus. */
 
 /* Éléments flottants — les vraies marques, pas des stickers décoratifs */
-.float{position:absolute;z-index:3;display:flex;align-items:center;gap:.5rem;
+.float{position:absolute;z-index:3;display:inline-flex;align-items:center;gap:.5rem;
   padding:.55rem .9rem;border-radius:var(--r-pill);background:var(--card);
   box-shadow:var(--edge),var(--shadow-md);font-size:.85rem;font-weight:600;white-space:nowrap}
-.float img{width:18px;height:18px;border-radius:5px;object-fit:cover}
-.float--1{top:12%;left:-4%}
-.float--2{top:44%;right:-6%}
-.float--3{bottom:16%;left:-8%}
-.js .float{animation:bob 5.5s ease-in-out infinite}
+.float .i{width:15px;height:15px;color:var(--ink-3);flex:none}
+/* variante ronde : juste une icône qui flotte (IA, réseaux) */
+.float--ico{padding:0;width:44px;height:44px;justify-content:center;border-radius:14px}
+.float--ico .i{width:19px;height:19px;color:var(--orange)}
+.float--dark{background:var(--night);color:var(--ink-on-dark)}
+.float--dark .i{color:var(--orange)}
+
+.float--1{top:9%;left:-6%}
+.float--2{top:36%;right:-8%}
+.float--3{bottom:22%;left:-10%}
+.float--4{top:20%;right:4%}
+.float--5{bottom:8%;right:-2%}
+
+.js .float{animation:bob 5.5s ease-in-out infinite;will-change:transform}
 .js .float--2{animation-delay:-1.8s;animation-duration:6.4s}
 .js .float--3{animation-delay:-3.4s;animation-duration:6s}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-@media(max-width:900px){.float{display:none}}
+.js .float--4{animation-delay:-2.6s;animation-duration:7s}
+.js .float--5{animation-delay:-4.6s;animation-duration:5.8s}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(var(--rot,0deg))}
+               50%{transform:translateY(-10px) rotate(var(--rot,0deg))}}
+@media(max-width:980px){.float{display:none}}
 
 @media(max-width:900px){
   .hero{min-height:auto;padding-block:6.5rem 3rem}
@@ -305,7 +319,8 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
 .system__bridge p{font-size:var(--t-lead);max-width:38ch}
 
 /* ═══ 3. CE QU'IL A PRODUIT ═══ */
-.work__head{max-width:40rem;margin-bottom:clamp(2rem,4vw,3.25rem)}
+.work__head{max-width:44rem;margin-inline:auto;text-align:center;margin-bottom:clamp(2rem,4vw,3.25rem)}
+.work .eyebrow{justify-content:center;width:100%}
 .piece{display:grid;gap:clamp(1.75rem,4vw,3.5rem);align-items:center;
   padding-block:clamp(2rem,4vw,3rem);border-top:1px solid var(--hairline)}
 .piece--wide{grid-template-columns:1.05fr .95fr}
@@ -321,16 +336,22 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
 .piece__body p{color:var(--ink-2);margin-bottom:1.1rem;max-width:46ch}
 .piece__links{display:flex;flex-wrap:wrap;gap:1.25rem;margin-top:1.25rem}
 
-/* ═══ 4. LE PARI ═══ */
+/* ═══ 4. LE PARI — CENTRÉ, titre RÉDUIT (il criait, surtout sur mobile) ═══ */
 .bet{background:var(--card);border-block:1px solid var(--hairline)}
-.bet__inner{max-width:46rem}
-.bet h2{font-size:var(--t-display);font-weight:800;line-height:var(--lh-tight);margin-bottom:1.75rem}
-.bet p{font-size:var(--t-lead);color:var(--ink-2);margin-bottom:1.1rem;max-width:52ch}
+.bet__inner{max-width:54rem;margin-inline:auto;text-align:center}
+.bet .eyebrow{justify-content:center}
+/* était --t-display (52→80px) : trop gros. Échelle h1 : plus tenable, surtout en 390px. */
+.bet h2{font-size:clamp(1.85rem,1.1rem + 2.9vw,3.1rem);font-weight:800;
+  line-height:var(--lh-snug);margin-bottom:1.6rem}
+.bet p{font-size:var(--t-lead);color:var(--ink-2);margin-bottom:1.1rem;max-width:50ch;margin-inline:auto}
 .bet p:last-child{margin-bottom:0}
 
 /* ═══ 5. MAINTENANT ═══ */
 .now__card{background:var(--card-tint);border-radius:var(--r-xl);
-  padding:clamp(1.75rem,3.5vw,2.75rem);max-width:46rem;box-shadow:var(--edge),var(--shadow-md)}
+  padding:clamp(1.75rem,3.5vw,2.75rem);max-width:54rem;margin-inline:auto;
+  box-shadow:var(--edge),var(--shadow-md)}
+.now .eyebrow{justify-content:center;width:100%}
+.now__head{text-align:center;margin-bottom:1.6rem}
 .now__date{display:inline-flex;align-items:center;gap:.5rem;font-size:var(--t-caption);font-weight:600;
   letter-spacing:.08em;text-transform:uppercase;color:var(--orange-txt);
   background:var(--orange-soft);padding:.4rem .8rem;border-radius:var(--r-pill);margin-bottom:1.4rem}
@@ -341,8 +362,9 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
 
 /* ═══ 6. SLOT DE CONVERSION — carte NUIT (motif des réfs) ═══ */
 .offer__card{background:var(--night);color:var(--ink-on-dark);border-radius:var(--r-2xl);
-  padding:clamp(2rem,5vw,3.5rem);max-width:44rem;position:relative;overflow:hidden;
-  box-shadow:var(--shadow-xl)}
+  padding:clamp(2rem,5vw,3.5rem);max-width:56rem;margin-inline:auto;text-align:center;
+  position:relative;overflow:hidden;box-shadow:var(--shadow-xl)}
+.offer__card .eyebrow{justify-content:center;width:100%}
 .offer__card::before{content:"";position:absolute;inset:0;pointer-events:none;
   background-image:radial-gradient(circle,rgba(251,247,240,.07) 1px,transparent 1px);
   background-size:22px 22px}
@@ -350,8 +372,8 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
 .offer__card .eyebrow{color:rgba(251,247,240,.55)}
 .offer__card .eyebrow::before{background:var(--orange)}
 .offer__card h2{color:var(--ink-on-dark);margin-bottom:1rem}
-.offer__body{color:rgba(251,247,240,.72);margin-bottom:1.85rem;max-width:40ch}
-.offer__action{display:flex;flex-wrap:wrap;gap:.75rem}
+.offer__body{color:rgba(251,247,240,.72);margin-bottom:2rem;max-width:46ch;margin-inline:auto}
+.offer__action{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center}
 .offer__micro{margin-top:1.1rem;font-size:var(--t-caption);color:rgba(251,247,240,.45)}
 .offer__form{display:flex;flex-wrap:wrap;gap:.75rem;width:100%}
 .offer__form input{flex:1 1 15rem;font-family:var(--font-sans);font-size:1rem;padding:.95rem 1.3rem;
@@ -389,6 +411,9 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
 .js .rv{opacity:0;transform:translateY(16px)}
 .js .rv.in{opacity:1;transform:none;transition:opacity .6s var(--ease),transform .6s var(--ease)}
 
+@media(max-width:620px){
+  .counts{display:grid;grid-template-columns:1fr 1fr;gap:1rem 1.25rem}
+}
 @media(max-width:800px){
   .piece--wide,.piece--narrow{grid-template-columns:1fr}
   .piece--narrow .piece__media{order:0}
@@ -407,3 +432,40 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
   .js .float{animation:none}
   .grain{display:none}
 }
+
+/* ═══ BLOC RÉSEAUX (dans la carte nuit) — ordre = importance réelle ═══ */
+.socials{display:flex;flex-wrap:wrap;gap:.7rem;justify-content:center;margin-top:.25rem}
+.social{
+  display:inline-flex;align-items:center;gap:.6rem;
+  padding:.85rem 1.35rem;border-radius:var(--r-pill);
+  background:rgba(251,247,240,.07);color:var(--ink-on-dark);
+  box-shadow:inset 0 0 0 1px rgba(251,247,240,.14);
+  text-decoration:none;font-weight:600;font-size:.98rem;white-space:nowrap;
+  transition:transform .18s var(--ease),background .18s var(--ease),box-shadow .18s var(--ease);
+}
+.social:hover{transform:translateY(-3px);background:rgba(251,247,240,.13);
+  box-shadow:inset 0 0 0 1px rgba(251,247,240,.26),0 10px 22px -10px rgba(0,0,0,.6)}
+.social:active{transform:translateY(1px) scale(.99)}
+.social .i{width:19px;height:19px;flex:none}
+/* le premier réseau = l'orange plein (UN seul CTA orange par vue) */
+.social--first{background:var(--orange);color:#fff;box-shadow:0 8px 24px -10px rgba(233,106,43,.6)}
+.social--first:hover{background:var(--orange);box-shadow:0 16px 32px -12px rgba(233,106,43,.7)}
+/* un réseau pas encore ouvert : on le montre, on ne ment pas, on ne lie pas dans le vide */
+.social--soon{opacity:.42;pointer-events:none}
+.social--soon::after{content:"bientôt";font-size:.7rem;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;opacity:.7}
+
+/* ═══ SECTION "CE QUE JE SAIS FAIRE" — les capacités, pas la liste d'agents ═══ */
+.can{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.9rem;margin:1.75rem 0 0}
+.can__i{display:flex;align-items:flex-start;gap:.7rem;padding:1rem 1.1rem;
+  background:var(--card);border-radius:var(--r-md);box-shadow:var(--edge);
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.can__i:hover{transform:translateY(-3px);box-shadow:var(--edge),var(--shadow-md)}
+.can__i .i{width:17px;height:17px;flex:none;margin-top:.18rem;color:var(--orange)}
+.can__i span{font-size:var(--t-small);font-weight:500;color:var(--ink-2);line-height:1.45}
+.can__i b{color:var(--ink);font-weight:600}
+
+/* ambition — la phrase qui porte le "pourquoi" */
+.ambition{margin-top:1.75rem;padding:1.25rem 1.5rem;border-radius:var(--r-lg);
+  background:var(--orange-soft);box-shadow:inset 0 0 0 1px var(--orange-line)}
+.ambition p{font-size:var(--t-lead);color:var(--ink);max-width:none}
