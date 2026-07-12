@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tobias Collignon — je construis des choses qui tiennent debout</title>
+
+<!-- La MÊME description sert de meta, d'og:description et de 1er paragraphe.
+     Cette cohérence à 3 endroits est ce qui permet aux LLM de résoudre l'entité. -->
+<meta name="description" content="Tobias Collignon, 18 ans, étudiant en ingénierie de gestion en Belgique. Je construis une agence d'acquisition locale (Webivis), une app d'étude (StudyForge) et un studio de design (Oryzon) — avec une équipe de 39 agents IA que j'ai écrite moi-même. 0 client à ce jour : je construis en public, chiffres et galères inclus.">
+<link rel="canonical" href="https://tobiascollignon.vercel.app/">
+
+<meta property="og:type" content="profile">
+<meta property="og:locale" content="fr_BE">
+<meta property="og:url" content="https://tobiascollignon.vercel.app/">
+<meta property="og:title" content="Tobias Collignon — je construis des choses qui tiennent debout">
+<meta property="og:description" content="18 ans. Une agence, une app d'étude, un studio de design — et une équipe de 39 agents IA que j'ai écrite moi-même. 0 client à ce jour. Je construis en public.">
+<meta property="og:image" content="https://tobiascollignon.vercel.app/assets/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/BricolageGrotesque-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/styles.css">
+
+<!-- Le contenu n'est JAMAIS caché par défaut. Cette ligne pose .js AVANT le rendu :
+     le CSS ne masque les éléments à révéler QUE si le JS tourne. Sans JS (ou si le
+     script plante), toute la page reste visible. L'animation est une amélioration,
+     jamais une condition d'affichage. -->
+<script>document.documentElement.classList.add('js');</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ProfilePage",
+      "@id": "https://tobiascollignon.vercel.app/#page",
+      "url": "https://tobiascollignon.vercel.app/",
+      "name": "Tobias Collignon — je construis des choses qui tiennent debout",
+      "inLanguage": "fr-BE",
+      "dateModified": "2026-07-12",
+      "mainEntity": { "@id": "https://tobiascollignon.vercel.app/#tobias" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://tobiascollignon.vercel.app/#tobias",
+      "name": "Tobias Collignon",
+      "url": "https://tobiascollignon.vercel.app/",
+      "description": "Tobias Collignon, 18 ans, étudiant en ingénierie de gestion en Belgique. Je construis une agence d'acquisition locale (Webivis), une app d'étude (StudyForge) et un studio de design (Oryzon) — avec une équipe de 39 agents IA que j'ai écrite moi-même. 0 client à ce jour : je construis en public, chiffres et galères inclus.",
+      "address": { "@type": "PostalAddress", "addressCountry": "BE" },
+      "knowsAbout": [
+        "agents IA", "automatisation", "ingénierie de prompts",
+        "SaaS", "design graphique", "acquisition locale", "SEO et AEO"
+      ],
+      "hasOccupation": [
+        { "@type": "Occupation", "name": "Ingénieur IA (systèmes d'agents)" },
+        { "@type": "Occupation", "name": "Fondateur de SaaS" },
+        { "@type": "Occupation", "name": "Designer graphique" }
+      ],
+      "sameAs": [
+        "https://webivis.com",
+        "https://www.instagram.com/tobias_collignon_/",
+        "https://www.instagram.com/webivis/",
+        "https://www.instagram.com/study.forge.app/",
+        "https://www.instagram.com/oryzon_studio/",
+        "https://github.com/tobiascollignon-maker/tobias-hub"
+      ]
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://webivis.com/#org",
+      "name": "Webivis",
+      "url": "https://webivis.com",
+      "description": "Studio d'acquisition local, boosté à l'IA, pour les artisans et métiers de service en Belgique.",
+      "founder": { "@id": "https://tobiascollignon.vercel.app/#tobias" },
+      "sameAs": ["https://www.instagram.com/webivis/"]
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://tobiascollignon.vercel.app/#oryzon",
+      "name": "Oryzon",
+      "description": "Studio de design : miniatures, affiches et visuels social. Livrés en 24 à 48 heures.",
+      "founder": { "@id": "https://tobiascollignon.vercel.app/#tobias" },
+      "sameAs": ["https://www.instagram.com/oryzon_studio/"]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://study-forge-tawny.vercel.app/#app",
+      "name": "StudyForge",
+      "url": "https://study-forge-tawny.vercel.app",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web",
+      "author": { "@id": "https://tobiascollignon.vercel.app/#tobias" },
+      "description": "Application d'étude : cibler, comprendre, pratiquer, mémoriser. Répétition espacée et rappel actif."
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- Sprite d'icônes (style Lucide). Aucun emoji dans le markup : règle taste. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></symbol>
+  <symbol id="i-dot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></symbol>
+</svg>
+
+<main>
+
+  <!-- ═══ 1. HERO ═══ -->
+  <section class="hero" aria-labelledby="h-hero">
+    <div class="wrap">
+      <div class="hero__inner">
+        <p class="eyebrow">Tobias Collignon · 18 ans · Belgique</p>
+
+        <h1 id="h-hero">
+          Je construis des choses qui
+          <!-- LA marque : une seule fois sur toute la page. Le mot reste anthracite ;
+               l'orange est le TRACÉ, jamais la couleur du texte. -->
+          <span class="mark">tiennent debout<svg viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M3 8.5C48 4.2 108 2.6 168 3.4c38 .5 78 2.2 129 5.1"/></svg></span>.
+        </h1>
+
+        <p class="lede">
+          Étudiant en ingénierie de gestion. Je construis une agence d'acquisition,
+          une app d'étude et un studio de design — avec une équipe de 39 agents IA
+          que j'ai écrite moi-même.
+        </p>
+
+        <p class="hero__honest">
+          0 client signé à ce jour. Je ne vends pas un résultat que je n'ai pas encore :
+          je montre le vrai 0→1, chiffres et galères inclus.
+        </p>
+
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="#offer">
+            Suis le build <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </a>
+          <a class="tlink" href="#systeme">
+            Voir le système <svg class="i" aria-hidden="true"><use href="#i-down"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 2. LE SYSTÈME — l'élément signature ═══ -->
+  <section class="system" id="systeme" aria-labelledby="h-sys">
+    <div class="wrap">
+      <div class="system__head rv">
+        <p class="eyebrow">Le système</p>
+        <h2 id="h-sys">Je n'ai pas d'employés. J'ai une équipe d'agents.</h2>
+        <p class="lede">
+          Je les ai écrits un par un. Chacun a un rôle, un supérieur, un périmètre et ses
+          propres sources. Ils prospectent, écrivent, designent et codent — pendant que je
+          suis en cours.
+        </p>
+      </div>
+
+      <!-- ⛔ NE PAS ÉDITER À LA MAIN. Ce bloc est réécrit par scripts/gen_org_svg.py
+           depuis .claude/agents/. Un chiffre tapé à la main dérive, et une fausse
+           stat sur cette page détruirait la seule chose qu'elle vend : l'honnêteté. -->
+      <div class="counts rv">
+        <!--COUNTS:START--><div><b>39</b><span>agents</span></div><div><b>6</b><span>heads</span></div><div><b>7</b><span>leads</span></div><div><b>26</b><span>spécialistes</span></div><!--COUNTS:END-->
+      </div>
+
+      <div class="org-wrap is-idle rv" id="orgwrap">
+        <!--ORG:START--><svg class="org" viewBox="0 0 1018 994" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="org-t org-d"><title id="org-t">Org-chart du système d'agents de Tobias Collignon</title><desc id="org-d">Organigramme réel du système d&#x27;agents : 39 agents — 6 heads, 7 leads, 26 spécialistes, sous une session co-CEO.</desc><g class="edges"><path class="e" data-to="carousel-copy" d="M 792.0 172.0 C 818.0 172.0, 818.0 112.0, 844.0 112.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="funnel-perso" d="M 792.0 172.0 C 818.0 172.0, 818.0 142.0, 844.0 142.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="shortform-scripted" d="M 792.0 172.0 C 818.0 172.0, 818.0 172.0, 844.0 172.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="shortform-volume" d="M 792.0 172.0 C 818.0 172.0, 818.0 202.0, 844.0 202.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="yt-packaging" d="M 792.0 172.0 C 818.0 172.0, 818.0 232.0, 844.0 232.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="webivis-case-study" d="M 792.0 292.0 C 818.0 292.0, 818.0 262.0, 844.0 262.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="webivis-linkedin-writer" d="M 792.0 292.0 C 818.0 292.0, 818.0 292.0, 844.0 292.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="webivis-value-pdf" d="M 792.0 292.0 C 818.0 292.0, 818.0 322.0, 844.0 322.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="content-perso-lead" d="M 584.0 232.0 C 610.0 232.0, 610.0 172.0, 636.0 172.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="content-webivis-lead" d="M 584.0 232.0 C 610.0 232.0, 610.0 292.0, 636.0 292.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="analytics-harvester" d="M 584.0 517.0 C 610.0 517.0, 610.0 442.0, 636.0 442.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="carousel-maker" d="M 584.0 517.0 C 610.0 517.0, 610.0 472.0, 636.0 472.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="community-manager" d="M 584.0 517.0 C 610.0 517.0, 610.0 502.0, 636.0 502.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="social-analyst" d="M 584.0 517.0 C 610.0 517.0, 610.0 532.0, 636.0 532.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="social-scheduler" d="M 584.0 517.0 C 610.0 517.0, 610.0 562.0, 636.0 562.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="video-editor" d="M 584.0 517.0 C 610.0 517.0, 610.0 592.0, 636.0 592.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="ads-lead" d="M 376.0 299.5 C 402.0 299.5, 402.0 82.0, 428.0 82.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="content-global" d="M 376.0 299.5 C 402.0 299.5, 402.0 232.0, 428.0 232.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="growth-lead" d="M 376.0 299.5 C 402.0 299.5, 402.0 352.0, 428.0 352.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="learning-coach" d="M 376.0 299.5 C 402.0 299.5, 402.0 382.0, 428.0 382.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="seo-lead" d="M 376.0 299.5 C 402.0 299.5, 402.0 412.0, 428.0 412.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="social-ops-lead" d="M 376.0 299.5 C 402.0 299.5, 402.0 517.0, 428.0 517.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="motion-designer" d="M 376.0 652.0 C 402.0 652.0, 402.0 622.0, 428.0 622.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="saas-builder" d="M 376.0 652.0 C 402.0 652.0, 402.0 652.0, 428.0 652.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="web-builder" d="M 376.0 652.0 C 402.0 652.0, 402.0 682.0, 428.0 682.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="closer-coach" d="M 376.0 847.0 C 402.0 847.0, 402.0 742.0, 428.0 742.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="email-copywriter" d="M 376.0 847.0 C 402.0 847.0, 402.0 772.0, 428.0 772.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="sales-enricher" d="M 376.0 847.0 C 402.0 847.0, 402.0 802.0, 428.0 802.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="sales-qualifier" d="M 376.0 847.0 C 402.0 847.0, 402.0 832.0, 428.0 832.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="sales-scraper" d="M 376.0 847.0 C 402.0 847.0, 402.0 862.0, 428.0 862.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="sequencer" d="M 376.0 847.0 C 402.0 847.0, 402.0 892.0, 428.0 892.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="setter-support" d="M 376.0 847.0 C 402.0 847.0, 402.0 922.0, 428.0 922.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="social-seller" d="M 376.0 847.0 C 402.0 847.0, 402.0 952.0, 428.0 952.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="ai-head" d="M 144.0 434.5 C 182.0 434.5, 182.0 22.0, 220.0 22.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="delivery-head" d="M 144.0 434.5 C 182.0 434.5, 182.0 52.0, 220.0 52.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="marketing-head" d="M 144.0 434.5 C 182.0 434.5, 182.0 299.5, 220.0 299.5" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="production-head" d="M 144.0 434.5 C 182.0 434.5, 182.0 652.0, 220.0 652.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="revops-head" d="M 144.0 434.5 C 182.0 434.5, 182.0 712.0, 220.0 712.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/><path class="e" data-to="sales-head" d="M 144.0 434.5 C 182.0 434.5, 182.0 847.0, 220.0 847.0" fill="none" stroke="#F97316" stroke-width="1.25" stroke-opacity=".45"/></g><g class="nodes"><g class="n" data-agent="CO_CEO" data-level="co-CEO" tabindex="0" role="listitem" aria-label="co-CEO"><title>co-CEO — La session principale. Cadre, arbitre, dispatche.</title><rect x="12.0" y="414.5" width="132" height="40" rx="12" fill="#F97316" stroke="#F97316" stroke-width="1"/><text x="78.0" y="439.4" text-anchor="middle" font-size="14" fill="#FFFFFF" font-weight="600">co-CEO</text></g><g class="n" data-agent="ai-head" data-level="Head" tabindex="0" role="listitem" aria-label="Head of AI"><title>Head of AI — Head of AI / OS-Engineering</title><rect x="220.0" y="5.0" width="156" height="34" rx="10" fill="#FFFFFF" stroke="#E4D9C8" stroke-width="1"/><text x="298.0" y="26.4" text-anchor="middle" font-size="12.5" fill="#2B2B2B" font-weight="600">Head of AI</text></g><g class="n" data-agent="delivery-head" data-level="Head" tabindex="0" role="listitem" aria-label="Head of Delivery"><title>Head of Delivery — Head of Delivery</title><rect x="220.0" y="35.0" width="156" height="34" rx="10" fill="#FFFFFF" stroke="#E4D9C8" stroke-width="1"/><text x="298.0" y="56.4" text-anchor="middle" font-size="12.5" fill="#2B2B2B" font-weight="600">Head of Delivery</text></g><g class="n" data-agent="marketing-head" data-level="Head" tabindex="0" role="listitem" aria-label="Head of Marketing"><title>Head of Marketing — Head of Marketing</title><rect x="220.0" y="282.5" width="156" height="34" rx="10" fill="#FFFFFF" stroke="#E4D9C8" stroke-width="1"/><text x="298.0" y="303.9" text-anchor="middle" font-size="12.5" fill="#2B2B2B" font-weight="600">Head of Marketing</text></g><g class="n" data-agent="production-head" data-level="Head" tabindex="0" role="listitem" aria-label="Head of Production"><title>Head of Production — Head of Production</title><rect x="220.0" y="635.0" width="156" height="34" rx="10" fill="#FFFFFF" stroke="#E4D9C8" stroke-width="1"/><text x="298.0" y="656.4" text-anchor="middle" font-size="12.5" fill="#2B2B2B" font-weight="600">Head of Production</text></g><g class="n" data-agent="revops-head" data-level="Head" tabindex="0" role="listitem" aria-label="Head of RevOps"><title>Head of RevOps — Head of RevOps / Gestion</title><rect x="220.0" y="695.0" width="156" height="34" rx="10" fill="#FFFFFF" stroke="#E4D9C8" stroke-width="1"/><text x="298.0" y="716.4" text-anchor="middle" font-size="12.5" fill="#2B2B2B" font-weight="600">Head of RevOps</text></g><g class="n" data-agent="sales-head" data-level="Head" tabindex="0" role="listitem" aria-label="Head of Sales"><title>Head of Sales — Head of Sales</title><rect x="220.0" y="830.0" width="156" height="34" rx="10" fill="#FFFFFF" stroke="#E4D9C8" stroke-width="1"/><text x="298.0" y="851.4" text-anchor="middle" font-size="12.5" fill="#2B2B2B" font-weight="600">Head of Sales</text></g><g class="n" data-agent="ads-lead" data-level="lead" tabindex="0" role="listitem" aria-label="ads-lead"><title>ads-lead — Ads Lead</title><rect x="428.0" y="67.0" width="156" height="30" rx="9" fill="#FFFFFF" stroke="#E4D9C8" stroke-width="1"/><text x="506.0" y="86.2" text-anchor="middle" font-size="12" fill="#2B2B2B" font-weight="500">ads-lead</text></g><g class="n" data-agent="content-global" data-level="lead" tabindex="0" role="listitem" aria-label="content-global"><title>content-global — Routeur de la branche Content . À utiliser quand une demande de contenu arrive sans branche préc…</title><rect x="428.0" y="217.0" width="156" height="30" rx="9" fill="#FFFFFF" stroke="#E4D9C8" stroke-width="1"/><text x="506.0" y="236.2" text-anchor="middle" font-size="12" fill="#2B2B2B" font-weight="500">content-global</text></g><g class="n" data-agent="growth-lead" data-level="lead" tabindex="0" role="listitem" aria-label="growth-lead"><title>growth-lead — Growth / App-Monetization lead . À utiliser pour monétiser les web apps &amp; produits digitaux en e…</title><rect x="428.0" y="337.0" width="156" height="30" rx="9" fill="#FFFFFF" stroke="#E4D9C8" stroke-width="1"/><text x="506.0" y="356.2" text-anchor="middle" font-size="12" fill="#2B2B2B" font-weight="500">growth-lead</text></g><g class="n" data-agent="learning-coach" data-level="spécialiste" tabindex="0" role="listitem" aria-label="learning-coach"><title>learning-coach — AI Coach de pratique délibérée . À utiliser pour faire monter un apprenant de palier sur une com…</title><rect x="428.0" y="369.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="509.0" y="385.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">learning-coach</text></g><g class="n" data-agent="seo-lead" data-level="lead" tabindex="0" role="listitem" aria-label="seo-lead"><title>seo-lead — SEO Lead</title><rect x="428.0" y="397.0" width="156" height="30" rx="9" fill="#FFFFFF" stroke="#E4D9C8" stroke-width="1"/><text x="506.0" y="416.2" text-anchor="middle" font-size="12" fill="#2B2B2B" font-weight="500">seo-lead</text></g><g class="n" data-agent="social-ops-lead" data-level="lead" tabindex="0" role="listitem" aria-label="social-ops-lead"><title>social-ops-lead — Head of Social-Ops</title><rect x="428.0" y="502.0" width="156" height="30" rx="9" fill="#FFFFFF" stroke="#E4D9C8" stroke-width="1"/><text x="506.0" y="521.2" text-anchor="middle" font-size="12" fill="#2B2B2B" font-weight="500">social-ops-lead</text></g><g class="n" data-agent="motion-designer" data-level="spécialiste" tabindex="0" role="listitem" aria-label="motion-designer"><title>motion-designer — Spécialiste MOTION GRAPHICS &amp; VIDÉOS DE PRÉSENTATION</title><rect x="428.0" y="609.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="509.0" y="625.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">motion-designer</text></g><g class="n" data-agent="saas-builder" data-level="spécialiste" tabindex="0" role="listitem" aria-label="saas-builder"><title>saas-builder — Spécialiste SAAS/WEBAPPS</title><rect x="428.0" y="639.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="509.0" y="655.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">saas-builder</text></g><g class="n" data-agent="web-builder" data-level="spécialiste" tabindex="0" role="listitem" aria-label="web-builder"><title>web-builder — Spécialiste SITES &amp; LANDINGS CONVERSION</title><rect x="428.0" y="669.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="509.0" y="685.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">web-builder</text></g><g class="n" data-agent="closer-coach" data-level="spécialiste" tabindex="0" role="listitem" aria-label="closer-coach"><title>closer-coach — Spécialiste BRIEF &amp; DEBRIEF D&#x27;APPELS</title><rect x="428.0" y="729.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="509.0" y="745.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">closer-coach</text></g><g class="n" data-agent="email-copywriter" data-level="spécialiste" tabindex="0" role="listitem" aria-label="email-copywriter"><title>email-copywriter — Spécialiste COPY EMAIL</title><rect x="428.0" y="759.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="509.0" y="775.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">email-copywriter</text></g><g class="n" data-agent="sales-enricher" data-level="spécialiste" tabindex="0" role="listitem" aria-label="sales-enricher"><title>sales-enricher — Spécialiste ENRICHISSEMENT</title><rect x="428.0" y="789.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="509.0" y="805.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">sales-enricher</text></g><g class="n" data-agent="sales-qualifier" data-level="spécialiste" tabindex="0" role="listitem" aria-label="sales-qualifier"><title>sales-qualifier — Spécialiste QUALIFICATION</title><rect x="428.0" y="819.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="509.0" y="835.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">sales-qualifier</text></g><g class="n" data-agent="sales-scraper" data-level="spécialiste" tabindex="0" role="listitem" aria-label="sales-scraper"><title>sales-scraper — Spécialiste SCRAPING</title><rect x="428.0" y="849.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="509.0" y="865.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">sales-scraper</text></g><g class="n" data-agent="sequencer" data-level="spécialiste" tabindex="0" role="listitem" aria-label="sequencer"><title>sequencer — Spécialiste ORCHESTRATION D&#x27;ENVOIS</title><rect x="428.0" y="879.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="509.0" y="895.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">sequencer</text></g><g class="n" data-agent="setter-support" data-level="spécialiste" tabindex="0" role="listitem" aria-label="setter-support"><title>setter-support — Spécialiste RÉPONSES &amp; SETTING</title><rect x="428.0" y="909.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="509.0" y="925.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">setter-support</text></g><g class="n" data-agent="social-seller" data-level="spécialiste" tabindex="0" role="listitem" aria-label="social-seller"><title>social-seller — Spécialiste PROSPECTION SOCIALE FROIDE</title><rect x="428.0" y="939.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="509.0" y="955.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">social-seller</text></g><g class="n" data-agent="content-perso-lead" data-level="lead" tabindex="0" role="listitem" aria-label="content-perso-lead"><title>content-perso-lead — Head of Content Perso . À utiliser pour tout contenu du compte PERSONNEL : pilote la voix et DIS…</title><rect x="636.0" y="157.0" width="156" height="30" rx="9" fill="#FFFFFF" stroke="#E4D9C8" stroke-width="1"/><text x="714.0" y="176.2" text-anchor="middle" font-size="12" fill="#2B2B2B" font-weight="500">content-perso-lead</text></g><g class="n" data-agent="content-webivis-lead" data-level="lead" tabindex="0" role="listitem" aria-label="content-webivis-lead"><title>content-webivis-lead — Head of Content Webivis . À utiliser pour tout contenu du compte WEBIVIS : pilote la voix founde…</title><rect x="636.0" y="277.0" width="156" height="30" rx="9" fill="#FFFFFF" stroke="#E4D9C8" stroke-width="1"/><text x="714.0" y="296.2" text-anchor="middle" font-size="12" fill="#2B2B2B" font-weight="500">content-webivis-lead</text></g><g class="n" data-agent="analytics-harvester" data-level="spécialiste" tabindex="0" role="listitem" aria-label="analytics-harvester"><title>analytics-harvester — Spécialiste extraction MÉCANIQUE des stats brutes depuis les Studios → remplit PERFORMANCE_LOG. …</title><rect x="636.0" y="429.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="717.0" y="445.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">analytics-harvester</text></g><g class="n" data-agent="carousel-maker" data-level="spécialiste" tabindex="0" role="listitem" aria-label="carousel-maker"><title>carousel-maker — Spécialiste PRODUCTION de carrousels</title><rect x="636.0" y="459.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="717.0" y="475.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">carousel-maker</text></g><g class="n" data-agent="community-manager" data-level="spécialiste" tabindex="0" role="listitem" aria-label="community-manager"><title>community-manager — Spécialiste COMMUNAUTÉ</title><rect x="636.0" y="489.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="717.0" y="505.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">community-manager</text></g><g class="n" data-agent="social-analyst" data-level="spécialiste" tabindex="0" role="listitem" aria-label="social-analyst"><title>social-analyst — Spécialiste INTERPRÉTATION des données Social-Ops</title><rect x="636.0" y="519.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="717.0" y="535.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">social-analyst</text></g><g class="n" data-agent="social-scheduler" data-level="spécialiste" tabindex="0" role="listitem" aria-label="social-scheduler"><title>social-scheduler — Spécialiste PUBLICATION/PLANIFICATION cross-plateforme</title><rect x="636.0" y="549.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="717.0" y="565.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">social-scheduler</text></g><g class="n" data-agent="video-editor" data-level="spécialiste" tabindex="0" role="listitem" aria-label="video-editor"><title>video-editor — Spécialiste MONTAGE vidéo</title><rect x="636.0" y="579.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="717.0" y="595.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">video-editor</text></g><g class="n" data-agent="carousel-copy" data-level="spécialiste" tabindex="0" role="listitem" aria-label="carousel-copy"><title>carousel-copy — Spécialiste de la COPY de carrousels</title><rect x="844.0" y="99.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="925.0" y="115.8" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">carousel-copy</text></g><g class="n" data-agent="funnel-perso" data-level="spécialiste" tabindex="0" role="listitem" aria-label="funnel-perso"><title>funnel-perso — Spécialiste funnel du compte PERSO Tobias</title><rect x="844.0" y="129.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="925.0" y="145.8" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">funnel-perso</text></g><g class="n" data-agent="shortform-scripted" data-level="spécialiste" tabindex="0" role="listitem" aria-label="shortform-scripted"><title>shortform-scripted — Spécialiste TikTok/Reel/Short SCRIPTÉ de qualité pour le compte perso Tobias. Écrit le script tr…</title><rect x="844.0" y="159.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="925.0" y="175.8" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">shortform-scripted</text></g><g class="n" data-agent="shortform-volume" data-level="spécialiste" tabindex="0" role="listitem" aria-label="shortform-volume"><title>shortform-volume — Spécialiste du tier VOLUME pour le compte perso Tobias. À partir de la journée vécue , sort des …</title><rect x="844.0" y="189.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="925.0" y="205.8" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">shortform-volume</text></g><g class="n" data-agent="yt-packaging" data-level="spécialiste" tabindex="0" role="listitem" aria-label="yt-packaging"><title>yt-packaging — Spécialiste YouTube pour le compte perso Tobias</title><rect x="844.0" y="219.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="925.0" y="235.8" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">yt-packaging</text></g><g class="n" data-agent="webivis-case-study" data-level="spécialiste" tabindex="0" role="listitem" aria-label="webivis-case-study"><title>webivis-case-study — Spécialiste preuve / case study pour le compte WEBIVIS</title><rect x="844.0" y="249.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="925.0" y="265.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">webivis-case-study</text></g><g class="n" data-agent="webivis-linkedin-writer" data-level="spécialiste" tabindex="0" role="listitem" aria-label="webivis-linkedin-writer"><title>webivis-linkedin-writer — Spécialiste posts LinkedIn founder-led pour le compte WEBIVIS</title><rect x="844.0" y="279.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="925.0" y="295.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">webivis-linkedin-writer</text></g><g class="n" data-agent="webivis-value-pdf" data-level="spécialiste" tabindex="0" role="listitem" aria-label="webivis-value-pdf"><title>webivis-value-pdf — Spécialiste lead magnets / value PDF pour le compte WEBIVIS</title><rect x="844.0" y="309.5" width="162" height="25" rx="8" fill="#FCE9D6" stroke="#E4D9C8" stroke-width="1"/><text x="925.0" y="325.9" text-anchor="middle" font-size="11" fill="#2B2B2B" font-weight="500">webivis-value-pdf</text></g></g></svg><ul class="sr-only org-tree"><li><strong>co-CEO</strong> — La session principale. Cadre, arbitre, dispatche.<ul><li><strong>Head of AI</strong> — Head of AI / OS-Engineering</li><li><strong>Head of Delivery</strong> — Head of Delivery</li><li><strong>Head of Marketing</strong> — Head of Marketing<ul><li><strong>ads-lead</strong> — Ads Lead</li><li><strong>content-global</strong> — Routeur de la branche Content . À utiliser quand une demande de contenu arrive sans branche préc…<ul><li><strong>content-perso-lead</strong> — Head of Content Perso . À utiliser pour tout contenu du compte PERSONNEL : pilote la voix et DIS…<ul><li><strong>carousel-copy</strong> — Spécialiste de la COPY de carrousels</li><li><strong>funnel-perso</strong> — Spécialiste funnel du compte PERSO Tobias</li><li><strong>shortform-scripted</strong> — Spécialiste TikTok/Reel/Short SCRIPTÉ de qualité pour le compte perso Tobias. Écrit le script tr…</li><li><strong>shortform-volume</strong> — Spécialiste du tier VOLUME pour le compte perso Tobias. À partir de la journée vécue , sort des …</li><li><strong>yt-packaging</strong> — Spécialiste YouTube pour le compte perso Tobias</li></ul></li><li><strong>content-webivis-lead</strong> — Head of Content Webivis . À utiliser pour tout contenu du compte WEBIVIS : pilote la voix founde…<ul><li><strong>webivis-case-study</strong> — Spécialiste preuve / case study pour le compte WEBIVIS</li><li><strong>webivis-linkedin-writer</strong> — Spécialiste posts LinkedIn founder-led pour le compte WEBIVIS</li><li><strong>webivis-value-pdf</strong> — Spécialiste lead magnets / value PDF pour le compte WEBIVIS</li></ul></li></ul></li><li><strong>growth-lead</strong> — Growth / App-Monetization lead . À utiliser pour monétiser les web apps &amp; produits digitaux en e…</li><li><strong>learning-coach</strong> — AI Coach de pratique délibérée . À utiliser pour faire monter un apprenant de palier sur une com…</li><li><strong>seo-lead</strong> — SEO Lead</li><li><strong>social-ops-lead</strong> — Head of Social-Ops<ul><li><strong>analytics-harvester</strong> — Spécialiste extraction MÉCANIQUE des stats brutes depuis les Studios → remplit PERFORMANCE_LOG. …</li><li><strong>carousel-maker</strong> — Spécialiste PRODUCTION de carrousels</li><li><strong>community-manager</strong> — Spécialiste COMMUNAUTÉ</li><li><strong>social-analyst</strong> — Spécialiste INTERPRÉTATION des données Social-Ops</li><li><strong>social-scheduler</strong> — Spécialiste PUBLICATION/PLANIFICATION cross-plateforme</li><li><strong>video-editor</strong> — Spécialiste MONTAGE vidéo</li></ul></li></ul></li><li><strong>Head of Production</strong> — Head of Production<ul><li><strong>motion-designer</strong> — Spécialiste MOTION GRAPHICS &amp; VIDÉOS DE PRÉSENTATION</li><li><strong>saas-builder</strong> — Spécialiste SAAS/WEBAPPS</li><li><strong>web-builder</strong> — Spécialiste SITES &amp; LANDINGS CONVERSION</li></ul></li><li><strong>Head of RevOps</strong> — Head of RevOps / Gestion</li><li><strong>Head of Sales</strong> — Head of Sales<ul><li><strong>closer-coach</strong> — Spécialiste BRIEF &amp; DEBRIEF D&#x27;APPELS</li><li><strong>email-copywriter</strong> — Spécialiste COPY EMAIL</li><li><strong>sales-enricher</strong> — Spécialiste ENRICHISSEMENT</li><li><strong>sales-qualifier</strong> — Spécialiste QUALIFICATION</li><li><strong>sales-scraper</strong> — Spécialiste SCRAPING</li><li><strong>sequencer</strong> — Spécialiste ORCHESTRATION D&#x27;ENVOIS</li><li><strong>setter-support</strong> — Spécialiste RÉPONSES &amp; SETTING</li><li><strong>social-seller</strong> — Spécialiste PROSPECTION SOCIALE FROIDE</li></ul></li></ul></li></ul><!--ORG:END-->
+      </div>
+
+      <p class="org-role" id="orgrole" aria-live="polite">
+        Survole un agent pour voir son rôle.
+      </p>
+
+      <div class="system__bridge rv">
+        <p>Ce système n'est pas public. <strong>Ce qu'il a produit l'est.</strong></p>
+        <a class="tlink" href="https://github.com/tobiascollignon-maker/tobias-hub" target="_blank" rel="noopener">
+          Cette page a été conçue et codée par lui — le code est ouvert
+          <svg class="i" aria-hidden="true"><use href="#i-code"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 3. CE QU'IL A PRODUIT ═══ -->
+  <!-- Trois traitements STRUCTURELLEMENT différents. Le rythme EST la hiérarchie.
+       Une rangée de 3 cartes égales est bannie (taste §7). -->
+  <section class="work" aria-labelledby="h-work">
+    <div class="wrap">
+      <div class="work__head rv">
+        <p class="eyebrow">Ce qu'il a produit</p>
+        <h2 id="h-work">Trois choses vivantes. Pas trois idées.</h2>
+      </div>
+
+      <!-- Webivis : la plus large -->
+      <article class="piece piece--wide rv">
+        <div class="piece__media">
+          <img src="/assets/img/webivis.jpg" alt="La page d'accueil de webivis.com" width="1200" height="750" loading="lazy" decoding="async">
+        </div>
+        <div class="piece__body">
+          <h3>Webivis</h3>
+          <p class="piece__role">Co-fondateur · CEO · Head of Sales</p>
+          <p>
+            Un studio d'acquisition local, boosté à l'IA, pour les artisans belges.
+            On n'installe pas un site vitrine : on installe le système qui transforme
+            une recherche Google en appel et en demande de devis.
+          </p>
+          <p class="piece__status"><span class="dot"></span>Lancé · la prospection démarre · 0 client signé</p>
+          <div class="piece__links">
+            <a class="tlink" href="https://webivis.com" target="_blank" rel="noopener">
+              webivis.com <svg class="i" aria-hidden="true"><use href="#i-ext"/></svg>
+            </a>
+            <a class="tlink" href="https://www.instagram.com/webivis/" target="_blank" rel="noopener">
+              Instagram <svg class="i" aria-hidden="true"><use href="#i-ig"/></svg>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- StudyForge : plus étroite, en miroir -->
+      <article class="piece piece--narrow rv">
+        <div class="piece__media">
+          <img src="/assets/img/studyforge.jpg" alt="L'application StudyForge, écran d'accueil" width="1200" height="750" loading="lazy" decoding="async">
+        </div>
+        <div class="piece__body">
+          <h3>StudyForge</h3>
+          <p class="piece__role">Construit seul — du schéma de base au déploiement</p>
+          <p>
+            Mémoriser, apprendre et réussir un examen sont trois choses différentes.
+            Les apps de flashcards ne font que la première. StudyForge fait la chaîne
+            complète : cibler, comprendre, pratiquer, retenir.
+          </p>
+          <p class="piece__status"><span class="dot"></span>En ligne · gratuit · amélioré chaque semaine</p>
+          <div class="piece__links">
+            <a class="tlink" href="https://study-forge-tawny.vercel.app" target="_blank" rel="noopener">
+              Ouvrir l'app <svg class="i" aria-hidden="true"><use href="#i-ext"/></svg>
+            </a>
+            <a class="tlink" href="https://www.instagram.com/study.forge.app/" target="_blank" rel="noopener">
+              Instagram <svg class="i" aria-hidden="true"><use href="#i-ig"/></svg>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Oryzon : ni rangée ni carte. Sa preuve, ce sont les visuels eux-mêmes. -->
+      <article class="piece rv" style="grid-template-columns:1fr">
+        <div class="piece__body" style="max-width:46rem">
+          <h3>Oryzon</h3>
+          <p class="piece__role">Fondateur · direction artistique</p>
+          <p>
+            Des visuels qui font cliquer : miniatures, affiches, social. Qualité studio,
+            livrée en 24 à 48 heures. Ci-dessous, mes propres carrousels — c'est le
+            travail, pas une démo.
+          </p>
+          <p class="piece__status"><span class="dot"></span>100 € le visuel · 2 à 3 variantes · 24-48 h</p>
+        </div>
+        <div class="strip" role="list" aria-label="Visuels réalisés">
+          <img role="listitem" src="/assets/img/design-1.jpg" alt="Carrousel : « J'ai construit une agence sans rien vendre »" width="900" height="1125" loading="lazy" decoding="async">
+          <img role="listitem" src="/assets/img/design-2.jpg" alt="Carrousel éditorial, marque personnelle" width="900" height="1125" loading="lazy" decoding="async">
+          <img role="listitem" src="/assets/img/design-3.jpg" alt="Carrousel éditorial, marque personnelle" width="900" height="1125" loading="lazy" decoding="async">
+          <img role="listitem" src="/assets/img/design-4.jpg" alt="Carrousel éditorial, marque personnelle" width="900" height="1125" loading="lazy" decoding="async">
+          <img role="listitem" src="/assets/img/design-5.jpg" alt="Carrousel éditorial, marque personnelle" width="900" height="1125" loading="lazy" decoding="async">
+        </div>
+        <div class="piece__links" style="margin-top:.5rem">
+          <a class="tlink" href="https://www.instagram.com/oryzon_studio/" target="_blank" rel="noopener">
+            Le studio sur Instagram <svg class="i" aria-hidden="true"><use href="#i-ig"/></svg>
+          </a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ═══ 4. LE PARI — après la preuve, donc ça se lit comme une conviction ═══ -->
+  <section class="bet" aria-labelledby="h-bet">
+    <div class="wrap">
+      <div class="bet__inner rv">
+        <p class="eyebrow">Le pari</p>
+        <h2 id="h-bet">On n'a pas besoin d'attendre 30 ans.</h2>
+        <p>
+          Ni d'un diplôme, ni d'un capital de départ, ni de la permission de quelqu'un.
+        </p>
+        <p>
+          Je veux prouver — à moi d'abord, aux autres ensuite — qu'à 18 ans, avec de
+          l'ambition et les bons outils, on peut construire des choses sérieuses. Pas
+          un jour, quand ce sera le bon moment. Maintenant, avec ce qu'on a.
+        </p>
+        <p class="muted">
+          Si je me plante, ce sera public aussi.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 5. MAINTENANT — daté. Le substitut à la preuve sociale. ═══ -->
+  <section class="now" aria-labelledby="h-now">
+    <div class="wrap">
+      <div class="now__card rv">
+        <p class="eyebrow" style="color:#8A5A2E" id="h-now">Maintenant</p>
+        <time class="now__date" datetime="2026-07-12">Mis à jour le 12 juillet 2026</time>
+        <ul class="now__list">
+          <li><svg class="i" aria-hidden="true"><use href="#i-dot"/></svg>
+            <span><b>Webivis</b> — 222 prospects identifiés en Brabant wallon. La prospection commence. Toujours 0 client signé.</span></li>
+          <li><svg class="i" aria-hidden="true"><use href="#i-dot"/></svg>
+            <span><b>StudyForge</b> — en ligne et gratuit. J'améliore la mémorisation espacée cette semaine.</span></li>
+          <li><svg class="i" aria-hidden="true"><use href="#i-dot"/></svg>
+            <span><b>Oryzon</b> — l'offre est ouverte, le portfolio se remplit.</span></li>
+          <li><svg class="i" aria-hidden="true"><use href="#i-dot"/></svg>
+            <span><b>Études</b> — examens jusqu'au 19 juin. Le business avance entre deux.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 6. LE SLOT DE CONVERSION ═══ -->
+  <!-- UN composant, référencé 3× (CTA hero · barre mobile · ici).
+       Le squelette ne bouge jamais. Seul .offer__action change de contenu.
+       Modes prêts : follow (actuel) · capture · lowticket · call → voir CONTENT.md -->
+  <section class="offer" id="offer" data-offer-mode="follow" aria-labelledby="h-offer">
+    <div class="wrap">
+      <div class="offer__card rv">
+        <p class="eyebrow">Suivre le build</p>
+        <h2 id="h-offer">Je publie ce que j'apprends, pendant que je l'apprends.</h2>
+        <p class="offer__body">
+          Les workflows IA que j'utilise vraiment, les chiffres réels, et les trucs qui
+          ratent. Pas de méthode miracle — je n'en ai pas encore.
+        </p>
+
+        <div class="offer__action">
+          <a class="btn btn--primary" href="https://www.instagram.com/tobias_collignon_/" target="_blank" rel="noopener">
+            Me suivre sur Instagram <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </a>
+        </div>
+
+        <p class="offer__micro">Bientôt : le workflow de la semaine, par mail.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══ 7. SUIVRE — en dernier, volontairement ═══ -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__grid">
+      <div class="foot__col">
+        <h3>Moi</h3>
+        <ul>
+          <li><a href="https://www.instagram.com/tobias_collignon_/" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg>Instagram</a></li>
+          <li><a href="https://github.com/tobiascollignon-maker/tobias-hub" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-code"/></svg>Le code de cette page</a></li>
+        </ul>
+      </div>
+      <div class="foot__col">
+        <h3>Webivis</h3>
+        <ul>
+          <li><a href="https://webivis.com" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-globe"/></svg>webivis.com</a></li>
+          <li><a href="https://www.instagram.com/webivis/" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg>Instagram</a></li>
+        </ul>
+      </div>
+      <div class="foot__col">
+        <h3>StudyForge</h3>
+        <ul>
+          <li><a href="https://study-forge-tawny.vercel.app" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-globe"/></svg>Ouvrir l'app</a></li>
+          <li><a href="https://www.instagram.com/study.forge.app/" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg>Instagram</a></li>
+        </ul>
+      </div>
+      <div class="foot__col">
+        <h3>Oryzon</h3>
+        <ul>
+          <li><a href="https://www.instagram.com/oryzon_studio/" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg>Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot__legal">
+      <span>Tobias Collignon — Belgique</span>
+      <span>Construit avec mes agents. Le code est ouvert.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="bar" id="bar">
+  <a class="btn btn--primary" href="#offer">Suis le build <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+</div>
+
+<script src="/main.js" defer></script>
+</body>
+</html>

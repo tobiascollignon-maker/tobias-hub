@@ -1,0 +1,486 @@
+/* ============================================================================
+   Tobias Collignon — hub
+   Charte VERROUILLÉE (02_STATE/projects/content_system/COWORK_CLAUDE_DESIGN_PROJECT_PROMPT.md)
+   ⛔ Ne pas "améliorer" la palette. Voir README.md §Palette.
+   Règle d'or : l'orange n'est JAMAIS une couleur de texte.
+                Il est soit une MARQUE (un tracé), soit une SURFACE (un aplat).
+   ============================================================================ */
+
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  src: url('./assets/fonts/BricolageGrotesque-latin.woff2') format('woff2');
+  font-weight: 200 800; font-style: normal; font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+2000-206F, U+2192, U+2212;
+}
+@font-face {
+  font-family: 'Albert Sans';
+  src: url('./assets/fonts/AlbertSans-latin.woff2') format('woff2');
+  font-weight: 100 900; font-style: normal; font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+2000-206F, U+2192, U+2212;
+}
+
+:root {
+  --bg:          #F7F2EA;
+  --surface:     #FFFFFF;
+  --accent:      #F97316;   /* SEUL accent — le hex de la charte, intact */
+  --accent-lift: #FB8B3F;   /* survol du CTA : on ÉCLAIRCIT (le texte reste lisible) */
+  --accent-deep: #C65309;   /* liserés/focus uniquement — jamais un aplat sous du blanc */
+  --accent-pale: #FCE9D6;
+  --ink:         #2B2B2B;   /* jamais de noir pur */
+  --ink-soft:    #6B6659;   /* MESURÉ : 5.13:1 sur le beige. #8A8578 était à 3.30 → échec AA */
+  --ink-onaccent:#2B2B2B;   /* MESURÉ : 5.05:1 sur #F97316. Le blanc était à 2.80 → échec */
+  --stroke:      #E4D9C8;
+
+  /* ombres TEINTÉES au fond (règle taste : jamais de gris neutre sur du beige) */
+  --shadow-sm: 0 1px 2px rgba(138,133,120,.09);
+  --shadow-md: 0 4px 16px -4px rgba(138,133,120,.16);
+  --shadow-lg: 0 18px 44px -18px rgba(138,133,120,.30);
+
+  --display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --body:    'Albert Sans', system-ui, -apple-system, sans-serif;
+
+  --gut: clamp(1.25rem, 4vw, 2.5rem);
+  --max: 1120px;
+  --ease: cubic-bezier(.16, 1, .3, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img, svg { max-width: 100%; display: block; }
+/* height:auto est OBLIGATOIRE : les attributs width/height du HTML (qui protègent du
+   CLS) posent une hauteur explicite, et aspect-ratio est alors ignoré. Sans cette
+   ligne, chaque image s'affiche à sa hauteur native. */
+img { height: auto; }
+a { color: inherit; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0;
+  margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+:focus-visible {
+  outline: 2.5px solid var(--accent-deep);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.wrap { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: var(--gut); }
+
+section { padding-block: clamp(4.5rem, 11vw, 8.5rem); }
+
+/* ---------- Typographie ------------------------------------------------- */
+/* Hiérarchie par POIDS et COULEUR, pas par taille brute (taste : "H1 must not scream") */
+
+.eyebrow {
+  font-family: var(--body);
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 1.25rem;
+}
+
+h1 {
+  font-family: var(--display);
+  font-size: clamp(2.15rem, 5.2vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+}
+
+h2 {
+  font-family: var(--display);
+  font-size: clamp(1.6rem, 3.4vw, 2.35rem);
+  font-weight: 700;
+  line-height: 1.14;
+  letter-spacing: -.02em;
+  text-wrap: balance;
+}
+
+h3 {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+
+.lede { font-size: clamp(1.05rem, 1.9vw, 1.2rem); color: #4A4741; max-width: 56ch; }
+.muted { color: var(--ink-soft); }
+.small { font-size: .875rem; line-height: 1.55; }
+
+/* ---------- La MARQUE : le trait tracé main -----------------------------
+   Une seule fois sur toute la page. Au deuxième, ça devient de la déco (taste). */
+.mark { position: relative; white-space: nowrap; }
+.mark svg {
+  position: absolute;
+  left: -1%; bottom: -.14em;      /* remonté : le trait frôle la ligne de base */
+  width: 102%; height: .26em;
+  overflow: visible;
+  pointer-events: none;
+}
+.mark path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 5;                 /* affiné : un trait de feutre, pas un surligneur */
+  stroke-linecap: round;
+  stroke-dasharray: var(--len, 400);
+  stroke-dashoffset: var(--len, 400);
+  animation: draw .75s var(--ease) .35s forwards;
+}
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+/* ---------- Boutons ------------------------------------------------------ */
+.btn {
+  display: inline-flex; align-items: center; gap: .55rem;
+  font-family: var(--body);
+  font-size: 1rem; font-weight: 600;
+  padding: .95rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .15s var(--ease), background-color .15s var(--ease), box-shadow .15s var(--ease);
+}
+/* Orange = SURFACE (aplat). Texte ANTHRACITE, jamais blanc :
+   blanc sur #F97316 = 2.80:1 → échoue AA. Anthracite = 5.05:1 → passe.
+   Bonus : un CTA orange à texte sombre est bien plus distinctif que le
+   orange-texte-blanc que fait tout le monde. */
+.btn--primary {
+  background: var(--accent);
+  color: var(--ink-onaccent);
+  box-shadow: var(--shadow-md);
+}
+.btn--primary:hover { background: var(--accent-lift); box-shadow: var(--shadow-lg); }
+.btn--primary:active { transform: translateY(1px) scale(.985); }  /* feedback tactile */
+
+.btn--ghost {
+  background: transparent; color: var(--ink);
+  border-color: var(--stroke);
+}
+.btn--ghost:hover { background: var(--surface); border-color: var(--ink-soft); }
+.btn--ghost:active { transform: translateY(1px) scale(.985); }
+
+.btn .i { width: 18px; height: 18px; flex: none; }
+
+/* liens texte */
+.tlink {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-weight: 600; text-decoration: none;
+  border-bottom: 1.5px solid var(--stroke);
+  padding-bottom: 1px;
+  transition: border-color .15s var(--ease);
+}
+.tlink:hover { border-color: var(--accent); }
+.tlink .i { width: 15px; height: 15px; }
+
+/* ---------- 1. Hero ------------------------------------------------------ */
+/* Asymétrie gauche (taste : hero centré BANNI). min-height:100dvh, jamais 100vh. */
+.hero {
+  min-height: 100dvh;
+  display: flex; align-items: center;
+  padding-block: 6rem 4rem;
+}
+.hero__inner { max-width: 46rem; }
+.hero h1 { margin-bottom: 1.6rem; }
+.hero .lede { margin-bottom: 1rem; }
+.hero__honest {
+  font-size: .95rem; color: var(--ink-soft);
+  padding-left: .9rem; border-left: 2px solid var(--stroke);
+  margin-bottom: 2.4rem; max-width: 46ch;
+}
+.hero__cta { display: flex; flex-wrap: wrap; gap: .9rem 1.4rem; align-items: center; }
+
+/* Prêt pour la photo : dès que assets/img/tobias.jpg existe, ajouter .hero--photo
+   sur <section class="hero"> et décommenter <figure class="hero__portrait"> */
+.hero--photo .wrap {
+  display: grid; grid-template-columns: 1.15fr .85fr;
+  gap: clamp(2rem, 5vw, 4rem); align-items: center;
+}
+.hero__portrait img {
+  width: 100%; border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  aspect-ratio: 4/5; object-fit: cover;
+}
+@media (max-width: 860px) {
+  .hero--photo .wrap { grid-template-columns: 1fr; }
+  .hero__portrait { display: none; }   /* mobile : la parole d'abord */
+}
+
+/* ---------- 2. Le système (l'élément SIGNATURE) -------------------------- */
+.system { background: var(--surface); border-block: 1px solid var(--stroke); }
+.system__head { max-width: 44rem; margin-bottom: 2.5rem; }
+.system__head h2 { margin-bottom: 1.1rem; }
+
+/* comptages — CALCULÉS par gen_org_svg.py, jamais tapés à la main */
+.counts {
+  display: flex; flex-wrap: wrap; gap: 1.75rem 2.5rem;
+  padding: 1.35rem 0; margin-bottom: 2.25rem;
+  border-block: 1px solid var(--stroke);
+}
+.counts div { display: flex; align-items: baseline; gap: .5rem; }
+.counts b {
+  font-family: var(--display); font-size: 1.6rem; font-weight: 700;
+  letter-spacing: -.02em;
+}
+.counts span { font-size: .875rem; color: var(--ink-soft); }
+
+.org-wrap {
+  overflow-x: auto; overflow-y: hidden;
+  padding: 1.25rem 0 1.75rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--stroke) transparent;
+}
+.org { width: 100%; min-width: 780px; height: auto; }
+
+/* état de boot — le JS retire .is-idle quand la section entre dans le viewport.
+   Scopé à .js : sans JavaScript, l'org-chart s'affiche entièrement, tout de suite. */
+.js .org-wrap.is-idle .n,
+.js .org-wrap.is-idle .e { opacity: 0; }
+
+.org .n {
+  cursor: pointer;
+  transform-box: fill-box; transform-origin: center;
+  transition: opacity .25s var(--ease);
+}
+.org .n rect { transition: stroke .18s var(--ease), fill .18s var(--ease); }
+.org .n:hover rect, .org .n:focus-visible rect { stroke: var(--accent); stroke-width: 1.8; }
+.org .e { transition: stroke-opacity .18s var(--ease), stroke-width .18s var(--ease); }
+
+/* branche allumée au survol/tap (piloté en JS) */
+.org .n.lit rect { stroke: var(--accent); stroke-width: 1.8; }
+.org .e.lit { stroke-opacity: 1; stroke-width: 2; }
+.org.has-lit .n:not(.lit) { opacity: .38; }
+.org.has-lit .e:not(.lit) { stroke-opacity: .12; }
+
+/* animation de boot : les nœuds cascadent, les traits se dessinent */
+@keyframes nodeIn { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
+@keyframes edgeIn { to { stroke-dashoffset: 0; } }
+.org-wrap.boot .n { animation: nodeIn .34s var(--ease) both; animation-delay: var(--d, 0ms); }
+.org-wrap.boot .e {
+  stroke-dasharray: var(--len, 300); stroke-dashoffset: var(--len, 300);
+  opacity: 1;
+  animation: edgeIn .5s var(--ease) both; animation-delay: var(--d, 0ms);
+}
+
+.org-role {
+  min-height: 2.6rem;
+  display: flex; align-items: center;
+  font-size: .9rem; color: var(--ink-soft);
+  padding: .6rem .9rem;
+  background: var(--bg); border-radius: 10px;
+  border: 1px solid var(--stroke);
+}
+.org-role b { color: var(--ink); font-weight: 600; }
+
+.system__bridge {
+  margin-top: 2.75rem; padding-top: 1.75rem;
+  border-top: 1px solid var(--stroke);
+  display: flex; flex-wrap: wrap; gap: 1rem 2rem;
+  align-items: center; justify-content: space-between;
+}
+.system__bridge p { font-size: 1.05rem; max-width: 40ch; }
+
+/* ---------- 3. Ce qu'il a produit --------------------------------------- */
+/* Zig-zag asymétrique. La rangée de 3 cartes égales est BANNIE (taste §7). */
+.work__head { max-width: 40rem; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+
+.piece {
+  display: grid; gap: clamp(1.75rem, 4vw, 3.5rem);
+  align-items: center;
+  padding-block: clamp(2.25rem, 4vw, 3.25rem);
+  border-top: 1px solid var(--stroke);
+}
+.piece--wide { grid-template-columns: 1.1fr .9fr; }               /* Webivis : large */
+.piece--narrow { grid-template-columns: .85fr 1.15fr; }           /* StudyForge : miroir */
+.piece--narrow .piece__media { order: 2; }                        /* image à droite */
+
+.piece__media img {
+  width: 100%; border-radius: 14px;
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow-md);
+  aspect-ratio: 16/10; object-fit: cover; object-position: top center;
+}
+.piece__body h3 { margin-bottom: .5rem; }
+.piece__role {
+  font-size: .8rem; font-weight: 600; letter-spacing: .04em;
+  color: var(--ink-soft); text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.piece__body p { margin-bottom: 1rem; max-width: 46ch; }
+.piece__status {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-size: .85rem; color: var(--ink-soft);
+  background: var(--bg); border: 1px solid var(--stroke);
+  padding: .35rem .75rem; border-radius: 999px;
+  margin-bottom: 1.35rem;
+}
+.piece--onsurface .piece__status { background: var(--surface); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+.piece__links { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+
+/* Oryzon : ni rangée ni carte — une bande scrollable. Sa preuve, c'est le visuel. */
+.strip {
+  display: flex; gap: 1rem;
+  overflow-x: auto; padding: .25rem .25rem 1.25rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin; scrollbar-color: var(--stroke) transparent;
+}
+.strip img {
+  width: 210px; flex: none;
+  aspect-ratio: 4/5; object-fit: cover;
+  border-radius: 12px; border: 1px solid var(--stroke);
+  scroll-snap-align: start;
+  box-shadow: var(--shadow-sm);
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease);
+}
+.strip img:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.strip::-webkit-scrollbar, .org-wrap::-webkit-scrollbar { height: 6px; }
+.strip::-webkit-scrollbar-thumb, .org-wrap::-webkit-scrollbar-thumb {
+  background: var(--stroke); border-radius: 999px;
+}
+
+/* ---------- 4. Le pari --------------------------------------------------- */
+.bet { background: var(--surface); border-block: 1px solid var(--stroke); }
+.bet__inner { max-width: 44rem; }
+.bet h2 { font-size: clamp(1.9rem, 4.2vw, 2.9rem); margin-bottom: 1.75rem; }
+.bet p { font-size: clamp(1.05rem, 1.9vw, 1.2rem); margin-bottom: 1.1rem; max-width: 52ch; }
+.bet p:last-child { margin-bottom: 0; }
+
+/* ---------- 5. Maintenant ------------------------------------------------ */
+.now__card {
+  background: var(--accent-pale);   /* orange pâle = SURFACE secondaire */
+  border-radius: 18px;
+  padding: clamp(1.6rem, 3.5vw, 2.5rem);
+  max-width: 44rem;
+}
+.now__date {
+  display: block; font-size: .8rem; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: #8A5A2E;   /* MESURÉ : 4.96:1 sur #FCE9D6. #9C6B3F était à 3.87 → échec */
+  margin-bottom: 1.35rem;
+}
+.now__list { list-style: none; display: grid; gap: .9rem; }
+.now__list li { display: flex; gap: .75rem; align-items: flex-start; font-size: 1rem; }
+.now__list .i { width: 17px; height: 17px; flex: none; margin-top: .32rem; color: #8A5A2E; }
+
+/* ---------- 6. Le slot de conversion ------------------------------------ */
+/* UN composant. Le squelette ne bouge JAMAIS ; seul .offer__action change.
+   Modes : follow (aujourd'hui) · capture · lowticket · call → voir CONTENT.md */
+.offer__card {
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  border-radius: 20px;
+  padding: clamp(1.85rem, 4.5vw, 3.25rem);
+  box-shadow: var(--shadow-md);
+  max-width: 40rem;
+}
+.offer__card h2 { margin-bottom: 1rem; }
+.offer__body { color: #4A4741; margin-bottom: 1.85rem; max-width: 42ch; }
+.offer__action { display: flex; flex-wrap: wrap; gap: .75rem; }
+.offer__micro { margin-top: 1.1rem; font-size: .82rem; color: var(--ink-soft); }
+
+/* mode "capture" — prêt, dormant tant que la clé Brevo n'existe pas */
+.offer__form { display: flex; flex-wrap: wrap; gap: .75rem; width: 100%; }
+.offer__form input {
+  flex: 1 1 15rem;
+  font-family: var(--body); font-size: 1rem;
+  padding: .95rem 1.1rem;
+  border: 1px solid var(--stroke); border-radius: 12px;
+  background: var(--bg); color: var(--ink);
+}
+.offer__form input:focus-visible { border-color: var(--accent-deep); }
+.offer__msg { margin-top: .85rem; font-size: .9rem; min-height: 1.2rem; }
+.offer__msg[data-state="err"] { color: #B4441A; }
+.offer__msg[data-state="ok"] { color: #3D6B3D; }
+
+/* ---------- 7. Suivre / footer ------------------------------------------ */
+/* En DERNIER, volontairement : le visiteur VIENT de ces plateformes. */
+.foot { border-top: 1px solid var(--stroke); padding-block: 4rem 3rem; }
+.foot__grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1.5rem; margin-bottom: 3rem;
+}
+.foot__col h3 { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-soft); font-family: var(--body); font-weight: 600; margin-bottom: .9rem; }
+.foot__col ul { list-style: none; display: grid; gap: .55rem; }
+.foot__col a {
+  display: inline-flex; align-items: center; gap: .5rem;
+  text-decoration: none; font-size: .95rem;
+  transition: color .15s var(--ease);
+}
+.foot__col a:hover { color: var(--accent-deep); }
+.foot__col .i { width: 16px; height: 16px; color: var(--ink-soft); flex: none; }
+.foot__legal {
+  display: flex; flex-wrap: wrap; gap: .75rem 1.5rem;
+  justify-content: space-between; align-items: center;
+  padding-top: 1.75rem; border-top: 1px solid var(--stroke);
+  font-size: .82rem; color: var(--ink-soft);
+}
+
+/* ---------- Barre CTA mobile -------------------------------------------- */
+.bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  display: none;
+  padding: .75rem var(--gut) calc(.75rem + env(safe-area-inset-bottom));
+  background: rgba(247,242,234,.92);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--stroke);
+  transform: translateY(110%);
+  transition: transform .3s var(--ease);
+}
+.bar.up { transform: none; }
+.bar .btn { width: 100%; justify-content: center; }
+@media (max-width: 720px) { .bar { display: block; } }
+
+/* ---------- Reveal au scroll --------------------------------------------
+   ⚠️ Scopé à .js — posé dans le <head> avant le rendu. Sans JavaScript, RIEN
+   n'est masqué : la page entière est lisible. Une page dont le contenu dépend
+   d'un script est une page blanche le jour où le script tombe. */
+.js .rv { opacity: 0; transform: translateY(14px); }
+.js .rv.in { opacity: 1; transform: none; transition: opacity .55s var(--ease), transform .55s var(--ease); }
+
+/* ---------- Responsive --------------------------------------------------- */
+/* Toute mise en page asymétrique s'effondre en 1 colonne < 768px (taste, obligatoire) */
+@media (max-width: 800px) {
+  .piece--wide, .piece--narrow { grid-template-columns: 1fr; }
+  .piece--narrow .piece__media { order: 0; }
+  .system__bridge { flex-direction: column; align-items: flex-start; }
+  .counts { gap: 1.1rem 2rem; }
+  .foot { padding-bottom: 6.5rem; }   /* place pour la barre CTA */
+}
+@media (max-width: 420px) {
+  .strip img { width: 165px; }
+  .counts b { font-size: 1.35rem; }
+}
+
+/* ---------- prefers-reduced-motion : OBLIGATOIRE ------------------------- */
+/* L'information n'est JAMAIS derrière le mouvement. Le diagramme s'affiche
+   entièrement tracé, instantanément, et le survol/tap continue de marcher. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: .01ms !important;
+  }
+  .js .rv, .rv { opacity: 1; transform: none; }
+  .mark path { stroke-dashoffset: 0; }
+  .js .org-wrap.is-idle .n, .js .org-wrap.is-idle .e { opacity: 1; }
+  .org-wrap.boot .e { stroke-dashoffset: 0; }
+}

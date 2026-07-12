@@ -1,0 +1,23 @@
+# Crawlers de RECHERCHE explicitement autorisés.
+# ⚠️ Distinction load-bearing : les bots d'ENTRAÎNEMENT (GPTBot, ClaudeBot) et les bots
+# de RECHERCHE (OAI-SearchBot, Claude-SearchBot) sont des directives SÉPARÉES.
+# Ce sont les bots de recherche qui décident si cette page est citée dans une réponse.
+# Autoriser les bons est la seule action que les plateformes documentent elles-mêmes.
+# (Pas de llms.txt : mesuré inutile — 97% de ces fichiers ne reçoivent aucune requête.)
+
+User-agent: *
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+Sitemap: https://tobiascollignon.vercel.app/sitemap.xml
