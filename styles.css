@@ -1,501 +1,409 @@
 /* ============================================================================
    Tobias Collignon — hub
-   Charte VERROUILLÉE (02_STATE/projects/content_system/COWORK_CLAUDE_DESIGN_PROJECT_PROMPT.md)
-   ⛔ Ne pas "améliorer" la palette. Voir README.md §Palette.
-   Règle d'or : l'orange n'est JAMAIS une couleur de texte.
-                Il est soit une MARQUE (un tracé), soit une SURFACE (un aplat).
+   Bâti sur le VRAI design system : claude.ai/design "Tobias Collignon — Design System"
+   (tokens/colors.css · typography.css · radius-shadow.css · readme.md)
+   ⛔ Ne pas "améliorer" la palette ni la typo. Voir README.md §Design system.
+
+   LA règle de l'orange (readme, verbatim) :
+     « orange never sits on bold text. It lives on an elegant accent word
+       (serif-italic or handwritten), an orange highlighter, or a hand-drawn
+       underline / circle. »
    ============================================================================ */
 
-@font-face {
-  font-family: 'Bricolage Grotesque';
-  src: url('./assets/fonts/BricolageGrotesque-latin.woff2') format('woff2');
-  font-weight: 200 800; font-style: normal; font-display: swap;
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+2000-206F, U+2192, U+2212;
-}
-@font-face {
-  font-family: 'Albert Sans';
-  src: url('./assets/fonts/AlbertSans-latin.woff2') format('woff2');
-  font-weight: 100 900; font-style: normal; font-display: swap;
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+2000-206F, U+2192, U+2212;
-}
+@font-face{font-family:'Schibsted Grotesk';src:url('./assets/fonts/SchibstedGrotesk-latin.woff2') format('woff2');
+  font-weight:400 900;font-style:normal;font-display:swap;
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+2000-206F,U+2192,U+2212;}
+@font-face{font-family:'DM Serif Display';src:url('./assets/fonts/DMSerifDisplay-latin.woff2') format('woff2');
+  font-weight:400;font-style:italic;font-display:swap;
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+2000-206F;}
+@font-face{font-family:'Caveat';src:url('./assets/fonts/Caveat-latin.woff2') format('woff2');
+  font-weight:400 700;font-style:normal;font-display:swap;
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+2000-206F;}
 
-:root {
-  --bg:          #F7F2EA;
-  --surface:     #FFFFFF;
-  --accent:      #F97316;   /* SEUL accent — le hex de la charte, intact */
-  --accent-lift: #FB8B3F;   /* survol du CTA : on ÉCLAIRCIT (le texte reste lisible) */
-  --accent-deep: #C65309;   /* liserés/focus uniquement — jamais un aplat sous du blanc */
-  --accent-pale: #FCE9D6;
-  --ink:         #2B2B2B;   /* jamais de noir pur */
-  --ink-soft:    #6B6659;   /* MESURÉ : 5.13:1 sur le beige. #8A8578 était à 3.30 → échec AA */
-  --ink-onaccent:#2B2B2B;   /* MESURÉ : 5.05:1 sur #F97316. Le blanc était à 2.80 → échec */
-  --stroke:      #E4D9C8;
+:root{
+  /* — Surfaces — */
+  --paper:#FBF7F0; --paper-2:#F4EDE1; --card:#FFFFFF; --card-tint:#FDFAF4;
+  /* — Encre — */
+  --ink:#1E1B18; --ink-2:#4D463E; --ink-on-dark:#FBF7F0;
+  /* ⚠️ ÉCART ASSUMÉ AU DS. Le --ink-3 du design system (#8B8276) est à 3.54:1 sur le
+     papier → il ÉCHOUE AA, et il porte tout le petit texte (eyebrows, captions, footer).
+     Foncé à teinte et saturation identiques jusqu'au seuil : 4.93:1. À reporter dans le DS. */
+  --ink-3:#726B61;
 
-  /* ombres TEINTÉES au fond (règle taste : jamais de gris neutre sur du beige) */
-  --shadow-sm: 0 1px 2px rgba(138,133,120,.09);
-  --shadow-md: 0 4px 16px -4px rgba(138,133,120,.16);
-  --shadow-lg: 0 18px 44px -18px rgba(138,133,120,.30);
+  /* — Lignes — */
+  --hairline:#E9E1D3; --hairline-2:#DED4C2;
 
-  --display: 'Bricolage Grotesque', system-ui, sans-serif;
-  --body:    'Albert Sans', system-ui, -apple-system, sans-serif;
+  /* — Orange : SURFACE vs TEXTE ------------------------------------------
+     Le DS le dit lui-même : --orange-deep est le « readable orange text ».
+     --orange (#E96A2B) reste INTACT partout où c'est une surface ou un tracé
+     (bouton, pastille, trait, cercle, surligneur, connecteurs) : pas de seuil.
+     Dès que l'orange devient du TEXTE, il faut le foncer — mesuré, pas supposé. */
+  --orange:#E96A2B;          /* surfaces & tracés — le hex de marque, inchangé */
+  --orange-txt:#B24712;      /* petit texte (liens, pastilles) — 5.17:1 ✅ */
+  --orange-acc:#E75F1C;      /* mot-accent, GRAND texte (≥24px) — 3.25:1 ✅ */
+  --orange-deep:#C1531C;     /* hover / press */
+  --orange-soft:#FBE6D4; --orange-line:#F3C09A;
+  --marker:#F8C58F; --marker-glow:rgba(233,106,43,.26);
+  /* — Secondaires (doux, rares) — */
+  --violet:#6E5DE0; --violet-soft:#ECE9FB; --butter:#F4CB5C; --butter-soft:#FBEFC4;
+  /* — Surface nuit (bandeaux, footer) — */
+  --night:#14131A; --night-2:#20202B;
+  --positive:#2FA36B;
 
-  --gut: clamp(1.25rem, 4vw, 2.5rem);
-  --max: 1120px;
-  --ease: cubic-bezier(.16, 1, .3, 1);
-}
+  /* — Typo — */
+  --font-sans:'Schibsted Grotesk',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --font-accent-serif:'DM Serif Display',Georgia,serif;
+  --font-accent-script:'Caveat','Segoe Script',cursive;
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  --t-display:clamp(3.25rem,1.6rem + 5.6vw,5rem);
+  --t-h1:clamp(2.6rem,1.7rem + 3.2vw,3.75rem);
+  --t-h2:clamp(2rem,1.4rem + 2.2vw,2.875rem);
+  --t-h3:clamp(1.5rem,1.2rem + 1.1vw,2rem);
+  --t-lead:1.25rem; --t-body:1.0625rem; --t-small:.9375rem; --t-caption:.8125rem;
+  --lh-tight:1.04; --lh-snug:1.16; --lh-body:1.62;
+  --tr-tight:-.022em; --tr-eyebrow:.14em;
 
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  /* — Rayons (généreux, rien de coupant) — */
+  --r-sm:10px; --r-md:16px; --r-lg:24px; --r-xl:32px; --r-2xl:44px; --r-pill:999px;
 
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--body);
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
+  /* — Ombres : chaudes, multicouches, basses. Elles se posent, elles ne crient pas. — */
+  --shadow-xs:0 1px 2px rgba(45,33,18,.05);
+  --shadow-sm:0 1px 2px rgba(45,33,18,.04),0 2px 6px rgba(45,33,18,.05);
+  --shadow-md:0 4px 10px -3px rgba(58,42,22,.08),0 10px 24px -8px rgba(58,42,22,.10);
+  --shadow-lg:0 8px 20px -8px rgba(58,42,22,.10),0 28px 56px -20px rgba(58,42,22,.16);
+  --shadow-xl:0 12px 28px -10px rgba(58,42,22,.12),0 44px 80px -28px rgba(58,42,22,.20);
+  --edge:inset 0 0 0 1px var(--hairline);
+  --ring:0 0 0 4px rgba(233,106,43,.30);
 
-img, svg { max-width: 100%; display: block; }
-/* height:auto est OBLIGATOIRE : les attributs width/height du HTML (qui protègent du
-   CLS) posent une hauteur explicite, et aspect-ratio est alors ignoré. Sans cette
-   ligne, chaque image s'affiche à sa hauteur native. */
-img { height: auto; }
-a { color: inherit; }
-
-.sr-only {
-  position: absolute; width: 1px; height: 1px; padding: 0;
-  margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
-}
-
-:focus-visible {
-  outline: 2.5px solid var(--accent-deep);
-  outline-offset: 3px;
-  border-radius: 4px;
-}
-
-.wrap { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: var(--gut); }
-
-section { padding-block: clamp(4.5rem, 11vw, 8.5rem); }
-
-/* ---------- Typographie ------------------------------------------------- */
-/* Hiérarchie par POIDS et COULEUR, pas par taille brute (taste : "H1 must not scream") */
-
-.eyebrow {
-  font-family: var(--body);
-  font-size: .75rem;
-  font-weight: 600;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-  margin-bottom: 1.25rem;
+  --gut:clamp(1.25rem,4vw,2.5rem);
+  --max:1120px;
+  --ease:cubic-bezier(.16,1,.3,1);
 }
 
-h1 {
-  font-family: var(--display);
-  font-size: clamp(2.15rem, 5.2vw, 3.5rem);
-  font-weight: 700;
-  line-height: 1.06;
-  letter-spacing: -.025em;
-  text-wrap: balance;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:var(--font-sans); font-size:var(--t-body); line-height:var(--lh-body);
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+img,svg{max-width:100%;display:block}
+img{height:auto}
+a{color:inherit}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+:focus-visible{outline:none;box-shadow:var(--ring);border-radius:8px}
+
+.wrap{width:100%;max-width:var(--max);margin-inline:auto;padding-inline:var(--gut);position:relative;z-index:1}
+section{padding-block:clamp(4.5rem,10vw,7rem)}
+
+/* ═══ TEXTURE — grille de points + grain (readme : "faint dot-grid grain … adds texture") ═══ */
+.dots{position:relative}
+.dots::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle, rgba(30,27,24,.055) 1px, transparent 1px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 35%, #000 30%, transparent 78%);
+  mask-image:radial-gradient(ellipse 90% 70% at 50% 35%, #000 30%, transparent 78%);
+}
+/* Grain fin, global, sur une couche fixe et non-cliquable (règle perf : jamais sur un conteneur qui scrolle) */
+.grain{
+  position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-h2 {
-  font-family: var(--display);
-  font-size: clamp(1.6rem, 3.4vw, 2.35rem);
-  font-weight: 700;
-  line-height: 1.14;
-  letter-spacing: -.02em;
-  text-wrap: balance;
+/* ═══ TYPOGRAPHIE ═══ */
+.eyebrow{
+  font-size:var(--t-caption);font-weight:600;letter-spacing:var(--tr-eyebrow);
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:1.15rem;
+  display:inline-flex;align-items:center;gap:.55rem;
+}
+.eyebrow::before{content:"";width:18px;height:1px;background:var(--orange-line)}
+
+h1{font-size:var(--t-h1);font-weight:800;line-height:var(--lh-snug);letter-spacing:var(--tr-tight);text-wrap:balance}
+h2{font-size:var(--t-h2);font-weight:700;line-height:var(--lh-snug);letter-spacing:var(--tr-tight);text-wrap:balance}
+h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
+.lead{font-size:var(--t-lead);color:var(--ink-2);max-width:54ch}
+.muted{color:var(--ink-3)}
+
+/* ═══ L'ACCENT — c'est ICI que vit l'orange, jamais sur du gras ═══ */
+/* mot-accent : serif italique */
+.acc{font-family:var(--font-accent-serif);font-style:italic;font-weight:400;color:var(--orange-acc);font-size:1.02em}
+/* mot-accent : manuscrit */
+.acc-s{font-family:var(--font-accent-script);font-weight:700;color:var(--orange-acc);font-size:1.2em;line-height:1}
+/* surligneur */
+.hl{
+  background-image:linear-gradient(120deg,var(--marker-glow),var(--marker-glow));
+  background-repeat:no-repeat;background-size:100% 62%;background-position:0 78%;
+  padding:0 .12em;border-radius:2px;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;
+}
+/* soulignement tracé main */
+.ul{position:relative;display:inline-block}
+.ul svg{position:absolute;left:-2%;bottom:-.34em;width:104%;height:.5em;overflow:visible;pointer-events:none}
+.ul path{fill:none;stroke:var(--orange);stroke-width:4.2;stroke-linecap:round;
+  stroke-dasharray:var(--len,320);stroke-dashoffset:var(--len,320)}
+.js .ul.draw path{animation:draw .8s var(--ease) forwards}
+/* cercle tracé main */
+.cr{position:relative;display:inline-block;padding:0 .2em}
+.cr svg{position:absolute;left:-7%;top:-24%;width:114%;height:150%;overflow:visible;pointer-events:none}
+.cr path{fill:none;stroke:var(--orange);stroke-width:3.4;stroke-linecap:round;
+  stroke-dasharray:var(--len,700);stroke-dashoffset:var(--len,700)}
+.js .cr.draw path{animation:draw 1s var(--ease) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+/* ═══ BOUTONS — pilules (readme : "inputs & buttons are full pills") ═══ */
+.btn{
+  display:inline-flex;align-items:center;gap:.55rem;
+  font-family:var(--font-sans);font-size:1rem;font-weight:600;
+  padding:.95rem 1.6rem;border-radius:var(--r-pill);border:1px solid transparent;
+  text-decoration:none;cursor:pointer;white-space:nowrap;
+  transition:transform .18s var(--ease),background-color .18s var(--ease),box-shadow .18s var(--ease);
+}
+/* UN seul CTA orange par vue. Blanc sur #E96A2B = 3.55:1 → on force 17px/700 (AA grand texte). */
+.btn--primary{background:var(--orange);color:#fff;font-size:1.0625rem;font-weight:700;
+  box-shadow:var(--shadow-md),0 8px 24px -10px rgba(233,106,43,.55)}
+.btn--primary:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg),0 16px 34px -12px rgba(233,106,43,.6)}
+.btn--primary:active{transform:translateY(1px) scale(.99)}
+/* pilule nuit — le motif CTA sombre des références */
+.btn--night{background:var(--night);color:var(--ink-on-dark);box-shadow:var(--shadow-md)}
+.btn--night:hover{transform:translateY(-3px);background:var(--night-2);box-shadow:var(--shadow-lg)}
+.btn--night:active{transform:translateY(1px) scale(.99)}
+.btn--ghost{background:var(--card);color:var(--ink);box-shadow:var(--edge)}
+.btn--ghost:hover{transform:translateY(-3px);box-shadow:var(--edge),var(--shadow-md)}
+.btn--ghost:active{transform:translateY(1px) scale(.99)}
+.btn .i{width:18px;height:18px;flex:none}
+.btn--primary:hover .i{transform:translateX(2px);transition:transform .18s var(--ease)}
+
+.tlink{display:inline-flex;align-items:center;gap:.4rem;font-weight:600;text-decoration:none;
+  border-bottom:1.5px solid var(--hairline-2);padding-bottom:1px;transition:border-color .18s var(--ease),color .18s var(--ease)}
+.tlink:hover{border-color:var(--orange);color:var(--orange-txt)}
+.tlink .i{width:15px;height:15px}
+
+/* pastille */
+.pill{display:inline-flex;align-items:center;gap:.5rem;font-size:var(--t-caption);font-weight:600;
+  padding:.42rem .85rem;border-radius:var(--r-pill);background:var(--orange-soft);
+  color:var(--orange-txt);box-shadow:inset 0 0 0 1px var(--orange-line)}
+.pill--plain{background:var(--card);color:var(--ink-3);box-shadow:var(--edge)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--orange);flex:none}
+
+/* ═══ NAVBAR — collante, translucide (readme) ═══ */
+.nav{position:fixed;inset:0 0 auto;z-index:50;padding:.85rem 0;
+  background:rgba(251,247,240,0);backdrop-filter:blur(0px);
+  transition:background .3s var(--ease),backdrop-filter .3s var(--ease),box-shadow .3s var(--ease)}
+.nav.stuck{background:rgba(251,247,240,.82);backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--hairline)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.mark{display:flex;align-items:center;gap:.6rem;text-decoration:none;font-weight:700;letter-spacing:-.01em}
+/* Monogramme TC : le C est orange (motif du DS). Chip carré, lettres centrées. */
+.mark b{display:inline-flex;align-items:center;justify-content:center;gap:0;
+  width:32px;height:32px;border-radius:10px;flex:none;
+  background:var(--night);color:var(--ink-on-dark);
+  font-size:.82rem;font-weight:700;letter-spacing:-.01em;line-height:1}
+.mark b i{font-style:normal;color:var(--orange)}
+.mark span{font-size:1.02rem}
+.mark span::after{content:".";color:var(--orange)}
+.nav .btn{padding:.62rem 1.15rem;font-size:.92rem}
+@media(max-width:620px){.nav .btn{display:none}}
+
+/* ═══ 1. HERO ═══ */
+.hero{min-height:100dvh;display:flex;align-items:center;padding-block:8rem 4rem}
+.hero .wrap{display:grid;grid-template-columns:1.12fr .88fr;gap:clamp(1.5rem,4vw,3rem);align-items:center}
+.hero h1{margin-bottom:1.5rem}
+.hero .lead{margin-bottom:1.75rem}
+.hero__cta{display:flex;flex-wrap:wrap;gap:.9rem 1.3rem;align-items:center;margin-bottom:1.5rem}
+.hero__meta{display:flex;flex-wrap:wrap;gap:.5rem}
+
+/* Portrait DÉTOURÉ — pas de cadre, pas de carte : il flotte sur le papier. */
+.portrait{position:relative;display:grid;place-items:end center;min-height:min(66vh,560px)}
+/* Le sujet est détouré au niveau de la poitrine → sans masque il se termine par une ligne
+   droite qui hurle « image découpée ». Le dégradé le fait se DISSOUDRE dans le papier. */
+.portrait img{
+  width:100%;max-width:430px;position:relative;z-index:2;
+  filter:drop-shadow(0 22px 38px rgba(58,42,22,.18));
+  -webkit-mask-image:linear-gradient(to bottom,#000 76%,rgba(0,0,0,.55) 90%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 76%,rgba(0,0,0,.55) 90%,transparent 100%);
+}
+/* halo chaud derrière le sujet : il donne du relief sans cadre */
+.portrait::before{
+  content:"";position:absolute;z-index:1;left:50%;top:8%;transform:translateX(-50%);
+  width:84%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 50% 45%, var(--orange-soft) 0%, rgba(251,230,212,.45) 42%, transparent 68%);
+}
+/* Pas d'ombre au sol : le sujet se fond dans le papier par le bas, il ne "pose" pas dessus. */
+
+/* Éléments flottants — les vraies marques, pas des stickers décoratifs */
+.float{position:absolute;z-index:3;display:flex;align-items:center;gap:.5rem;
+  padding:.55rem .9rem;border-radius:var(--r-pill);background:var(--card);
+  box-shadow:var(--edge),var(--shadow-md);font-size:.85rem;font-weight:600;white-space:nowrap}
+.float img{width:18px;height:18px;border-radius:5px;object-fit:cover}
+.float--1{top:12%;left:-4%}
+.float--2{top:44%;right:-6%}
+.float--3{bottom:16%;left:-8%}
+.js .float{animation:bob 5.5s ease-in-out infinite}
+.js .float--2{animation-delay:-1.8s;animation-duration:6.4s}
+.js .float--3{animation-delay:-3.4s;animation-duration:6s}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@media(max-width:900px){.float{display:none}}
+
+@media(max-width:900px){
+  .hero{min-height:auto;padding-block:6.5rem 3rem}
+  .hero .wrap{grid-template-columns:1fr;gap:1.5rem}
+  .portrait{order:-1;min-height:0;max-width:250px;margin-inline:auto}
+  .portrait img{max-width:250px}
 }
 
-h3 {
-  font-family: var(--display);
-  font-size: 1.3rem;
-  font-weight: 600;
-  letter-spacing: -.01em;
+/* ═══ 2. LE SYSTÈME ═══ */
+.system{background:var(--paper-2);border-block:1px solid var(--hairline)}
+.system__head{max-width:44rem;margin-bottom:2rem}
+.system__head h2{margin-bottom:1rem}
+
+.counts{display:flex;flex-wrap:wrap;gap:1.5rem 2.75rem;padding:1.4rem 0;margin-bottom:1.75rem;
+  border-block:1px solid var(--hairline)}
+.counts div{display:flex;align-items:baseline;gap:.5rem}
+.counts b{font-size:1.75rem;font-weight:800;letter-spacing:var(--tr-tight)}
+.counts span{font-size:var(--t-small);color:var(--ink-3)}
+
+/* L'org-chart prend de la place → il est REPLIÉ par défaut.
+   Qui veut le voir l'ouvre ; les autres passent à la suite. */
+.org-toggle{display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;
+  font-family:var(--font-sans);font-size:1rem;font-weight:600;
+  padding:.85rem 1.5rem;border-radius:var(--r-pill);border:0;
+  background:var(--card);color:var(--ink);box-shadow:var(--edge),var(--shadow-sm);
+  transition:transform .18s var(--ease),box-shadow .18s var(--ease)}
+.org-toggle:hover{transform:translateY(-3px);box-shadow:var(--edge),var(--shadow-md)}
+.org-toggle .i{width:17px;height:17px;transition:transform .28s var(--ease)}
+.org-toggle[aria-expanded="true"] .i{transform:rotate(180deg)}
+
+.org-panel{overflow:hidden;height:0;transition:height .5s var(--ease)}
+.org-panel[hidden]{display:block}          /* on anime, on ne coupe pas */
+.org-inner{padding-top:1.75rem}
+
+.org-wrap{overflow-x:auto;overflow-y:hidden;padding:.5rem 0 1.25rem;-webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;scrollbar-color:var(--hairline-2) transparent}
+.org{width:100%;min-width:780px;height:auto}
+.js .org-wrap.is-idle .n,.js .org-wrap.is-idle .e{opacity:0}
+.org .n{cursor:pointer;transform-box:fill-box;transform-origin:center;transition:opacity .25s var(--ease)}
+.org .n rect{transition:stroke .18s var(--ease),fill .18s var(--ease)}
+.org .n:hover rect,.org .n:focus-visible rect{stroke:var(--orange);stroke-width:1.8}
+.org .e{transition:stroke-opacity .18s var(--ease),stroke-width .18s var(--ease)}
+.org .n.lit rect{stroke:var(--orange);stroke-width:1.8}
+.org .e.lit{stroke-opacity:1;stroke-width:2}
+.org.has-lit .n:not(.lit){opacity:.35}
+.org.has-lit .e:not(.lit){stroke-opacity:.1}
+@keyframes nodeIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@keyframes edgeIn{to{stroke-dashoffset:0}}
+.org-wrap.boot .n{animation:nodeIn .34s var(--ease) both;animation-delay:var(--d,0ms)}
+.org-wrap.boot .e{stroke-dasharray:var(--len,300);stroke-dashoffset:var(--len,300);opacity:1;
+  animation:edgeIn .5s var(--ease) both;animation-delay:var(--d,0ms)}
+
+.org-role{min-height:2.6rem;display:flex;align-items:center;font-size:var(--t-small);color:var(--ink-3);
+  padding:.65rem 1rem;background:var(--card);border-radius:var(--r-md);box-shadow:var(--edge)}
+.org-role b{color:var(--ink);font-weight:600}
+
+.system__bridge{margin-top:2.25rem;padding-top:1.75rem;border-top:1px solid var(--hairline);
+  display:flex;flex-wrap:wrap;gap:1rem 2rem;align-items:center;justify-content:space-between}
+.system__bridge p{font-size:var(--t-lead);max-width:38ch}
+
+/* ═══ 3. CE QU'IL A PRODUIT ═══ */
+.work__head{max-width:40rem;margin-bottom:clamp(2rem,4vw,3.25rem)}
+.piece{display:grid;gap:clamp(1.75rem,4vw,3.5rem);align-items:center;
+  padding-block:clamp(2rem,4vw,3rem);border-top:1px solid var(--hairline)}
+.piece--wide{grid-template-columns:1.05fr .95fr}
+.piece--narrow{grid-template-columns:.9fr 1.1fr}
+.piece--narrow .piece__media{order:2}
+.piece__media img{width:100%;border-radius:var(--r-lg);box-shadow:var(--edge),var(--shadow-lg);
+  aspect-ratio:16/10;object-fit:cover;object-position:top center;
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+.piece__media:hover img{transform:translateY(-3px);box-shadow:var(--edge),var(--shadow-xl)}
+.piece__body h3{margin-bottom:.4rem}
+.piece__role{font-size:var(--t-caption);font-weight:600;letter-spacing:.05em;color:var(--ink-3);
+  text-transform:uppercase;margin-bottom:1rem}
+.piece__body p{color:var(--ink-2);margin-bottom:1.1rem;max-width:46ch}
+.piece__links{display:flex;flex-wrap:wrap;gap:1.25rem;margin-top:1.25rem}
+
+/* ═══ 4. LE PARI ═══ */
+.bet{background:var(--card);border-block:1px solid var(--hairline)}
+.bet__inner{max-width:46rem}
+.bet h2{font-size:var(--t-display);font-weight:800;line-height:var(--lh-tight);margin-bottom:1.75rem}
+.bet p{font-size:var(--t-lead);color:var(--ink-2);margin-bottom:1.1rem;max-width:52ch}
+.bet p:last-child{margin-bottom:0}
+
+/* ═══ 5. MAINTENANT ═══ */
+.now__card{background:var(--card-tint);border-radius:var(--r-xl);
+  padding:clamp(1.75rem,3.5vw,2.75rem);max-width:46rem;box-shadow:var(--edge),var(--shadow-md)}
+.now__date{display:inline-flex;align-items:center;gap:.5rem;font-size:var(--t-caption);font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--orange-txt);
+  background:var(--orange-soft);padding:.4rem .8rem;border-radius:var(--r-pill);margin-bottom:1.4rem}
+.now__list{list-style:none;display:grid;gap:.95rem}
+.now__list li{display:flex;gap:.8rem;align-items:flex-start;color:var(--ink-2)}
+.now__list b{color:var(--ink);font-weight:600}
+.now__list .i{width:17px;height:17px;flex:none;margin-top:.34rem;color:var(--orange)}
+
+/* ═══ 6. SLOT DE CONVERSION — carte NUIT (motif des réfs) ═══ */
+.offer__card{background:var(--night);color:var(--ink-on-dark);border-radius:var(--r-2xl);
+  padding:clamp(2rem,5vw,3.5rem);max-width:44rem;position:relative;overflow:hidden;
+  box-shadow:var(--shadow-xl)}
+.offer__card::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle,rgba(251,247,240,.07) 1px,transparent 1px);
+  background-size:22px 22px}
+.offer__card > *{position:relative}
+.offer__card .eyebrow{color:rgba(251,247,240,.55)}
+.offer__card .eyebrow::before{background:var(--orange)}
+.offer__card h2{color:var(--ink-on-dark);margin-bottom:1rem}
+.offer__body{color:rgba(251,247,240,.72);margin-bottom:1.85rem;max-width:40ch}
+.offer__action{display:flex;flex-wrap:wrap;gap:.75rem}
+.offer__micro{margin-top:1.1rem;font-size:var(--t-caption);color:rgba(251,247,240,.45)}
+.offer__form{display:flex;flex-wrap:wrap;gap:.75rem;width:100%}
+.offer__form input{flex:1 1 15rem;font-family:var(--font-sans);font-size:1rem;padding:.95rem 1.3rem;
+  border:0;border-radius:var(--r-pill);background:rgba(251,247,240,.08);color:var(--ink-on-dark);
+  box-shadow:inset 0 0 0 1px rgba(251,247,240,.14)}
+.offer__form input::placeholder{color:rgba(251,247,240,.4)}
+.offer__form input:focus-visible{box-shadow:var(--ring)}
+.offer__msg{margin-top:.85rem;font-size:var(--t-small);min-height:1.2rem}
+.offer__msg[data-state="err"]{color:#FFA98A}
+.offer__msg[data-state="ok"]{color:#7BD6A6}
+
+/* ═══ 7. FOOTER ═══ */
+.foot{border-top:1px solid var(--hairline);padding-block:3.5rem 2.5rem;background:var(--paper-2)}
+.foot__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-bottom:2.5rem}
+.foot__col h3{font-size:var(--t-caption);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:600;margin-bottom:.85rem}
+.foot__col ul{list-style:none;display:grid;gap:.55rem}
+.foot__col a{display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;font-size:var(--t-small);
+  transition:color .18s var(--ease),transform .18s var(--ease)}
+.foot__col a:hover{color:var(--orange-txt);transform:translateX(2px)}
+.foot__col .i{width:16px;height:16px;color:var(--ink-3);flex:none}
+.foot__legal{display:flex;flex-wrap:wrap;gap:.75rem 1.5rem;justify-content:space-between;align-items:center;
+  padding-top:1.75rem;border-top:1px solid var(--hairline);font-size:var(--t-caption);color:var(--ink-3)}
+
+/* ═══ Barre CTA mobile ═══ */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;
+  padding:.75rem var(--gut) calc(.75rem + env(safe-area-inset-bottom));
+  background:rgba(251,247,240,.9);backdrop-filter:blur(12px);border-top:1px solid var(--hairline);
+  transform:translateY(110%);transition:transform .3s var(--ease)}
+.bar.up{transform:none}
+.bar .btn{width:100%;justify-content:center}
+@media(max-width:720px){.bar{display:block}.foot{padding-bottom:6.5rem}}
+
+/* ═══ Reveal ═══ */
+.js .rv{opacity:0;transform:translateY(16px)}
+.js .rv.in{opacity:1;transform:none;transition:opacity .6s var(--ease),transform .6s var(--ease)}
+
+@media(max-width:800px){
+  .piece--wide,.piece--narrow{grid-template-columns:1fr}
+  .piece--narrow .piece__media{order:0}
+  .system__bridge{flex-direction:column;align-items:flex-start}
 }
 
-.lede { font-size: clamp(1.05rem, 1.9vw, 1.2rem); color: #4A4741; max-width: 56ch; }
-.muted { color: var(--ink-soft); }
-.small { font-size: .875rem; line-height: 1.55; }
-
-/* ---------- La MARQUE : le trait tracé main -----------------------------
-   Une seule fois sur toute la page. Au deuxième, ça devient de la déco (taste). */
-.mark { position: relative; white-space: nowrap; }
-.mark svg {
-  position: absolute;
-  left: -1%; bottom: -.14em;      /* remonté : le trait frôle la ligne de base */
-  width: 102%; height: .26em;
-  overflow: visible;
-  pointer-events: none;
-}
-.mark path {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 5;                 /* affiné : un trait de feutre, pas un surligneur */
-  stroke-linecap: round;
-  stroke-dasharray: var(--len, 400);
-  stroke-dashoffset: var(--len, 400);
-  animation: draw .75s var(--ease) .35s forwards;
-}
-@keyframes draw { to { stroke-dashoffset: 0; } }
-
-/* ---------- Boutons ------------------------------------------------------ */
-.btn {
-  display: inline-flex; align-items: center; gap: .55rem;
-  font-family: var(--body);
-  font-size: 1rem; font-weight: 600;
-  padding: .95rem 1.5rem;
-  border-radius: 12px;
-  border: 1px solid transparent;
-  text-decoration: none;
-  cursor: pointer;
-  transition: transform .15s var(--ease), background-color .15s var(--ease), box-shadow .15s var(--ease);
-}
-/* Orange = SURFACE (aplat). Texte ANTHRACITE, jamais blanc :
-   blanc sur #F97316 = 2.80:1 → échoue AA. Anthracite = 5.05:1 → passe.
-   Bonus : un CTA orange à texte sombre est bien plus distinctif que le
-   orange-texte-blanc que fait tout le monde. */
-.btn--primary {
-  background: var(--accent);
-  color: var(--ink-onaccent);
-  box-shadow: var(--shadow-md);
-}
-.btn--primary:hover { background: var(--accent-lift); box-shadow: var(--shadow-lg); }
-.btn--primary:active { transform: translateY(1px) scale(.985); }  /* feedback tactile */
-
-.btn--ghost {
-  background: transparent; color: var(--ink);
-  border-color: var(--stroke);
-}
-.btn--ghost:hover { background: var(--surface); border-color: var(--ink-soft); }
-.btn--ghost:active { transform: translateY(1px) scale(.985); }
-
-.btn .i { width: 18px; height: 18px; flex: none; }
-
-/* liens texte */
-.tlink {
-  display: inline-flex; align-items: center; gap: .4rem;
-  font-weight: 600; text-decoration: none;
-  border-bottom: 1.5px solid var(--stroke);
-  padding-bottom: 1px;
-  transition: border-color .15s var(--ease);
-}
-.tlink:hover { border-color: var(--accent); }
-.tlink .i { width: 15px; height: 15px; }
-
-/* ---------- 1. Hero ------------------------------------------------------ */
-/* Asymétrie gauche (taste : hero centré BANNI). min-height:100dvh, jamais 100vh. */
-.hero {
-  min-height: 100dvh;
-  display: flex; align-items: center;
-  padding-block: 6rem 4rem;
-}
-.hero__inner { max-width: 46rem; }
-.hero h1 { margin-bottom: 1.6rem; }
-.hero .lede { margin-bottom: 1rem; }
-.hero__honest {
-  font-size: .95rem; color: var(--ink-soft);
-  padding-left: .9rem; border-left: 2px solid var(--stroke);
-  margin-bottom: 2.4rem; max-width: 46ch;
-}
-.hero__cta { display: flex; flex-wrap: wrap; gap: .9rem 1.4rem; align-items: center; }
-
-/* Portrait — asymétrie 1.2/0.8 (pas 50/50 : le texte porte, la photo accompagne) */
-.hero--photo .wrap {
-  display: grid; grid-template-columns: 1.2fr .8fr;
-  gap: clamp(2rem, 5vw, 4.5rem); align-items: center;
-}
-.hero__portrait { position: relative; }
-.hero__portrait img {
-  width: 100%;
-  aspect-ratio: 4/5; object-fit: cover; object-position: center 22%;
-  border-radius: 18px;
-  border: 1px solid var(--stroke);   /* liseré chaud : marie le taupe de la photo au beige */
-  box-shadow: var(--shadow-lg);      /* ombre TEINTÉE chaud, jamais grise */
-}
-/* Un halo beige très doux sous la photo : elle repose sur la page au lieu d'y être collée. */
-.hero__portrait::after {
-  content: ""; position: absolute; inset: auto 6% -14px 6%;
-  height: 26px; border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(138,133,120,.18), transparent 70%);
-  z-index: -1;
-}
-
-/* Mobile : le portrait passe AU-DESSUS du texte, en bandeau court.
-   On ne le masque plus — le visiteur vient d'Instagram, il veut voir la personne. */
-@media (max-width: 860px) {
-  .hero--photo .wrap { grid-template-columns: 1fr; gap: 2rem; }
-  .hero__portrait { order: -1; max-width: 172px; }
-  /* rond : lit comme un avatar. 8% (et non 22%) sinon le haut des cheveux est rogné. */
-  .hero__portrait img { aspect-ratio: 1/1; border-radius: 50%; object-position: center 8%; }
-  .hero__portrait::after { display: none; }
-}
-
-/* ---------- 2. Le système (l'élément SIGNATURE) -------------------------- */
-.system { background: var(--surface); border-block: 1px solid var(--stroke); }
-.system__head { max-width: 44rem; margin-bottom: 2.5rem; }
-.system__head h2 { margin-bottom: 1.1rem; }
-
-/* comptages — CALCULÉS par gen_org_svg.py, jamais tapés à la main */
-.counts {
-  display: flex; flex-wrap: wrap; gap: 1.75rem 2.5rem;
-  padding: 1.35rem 0; margin-bottom: 2.25rem;
-  border-block: 1px solid var(--stroke);
-}
-.counts div { display: flex; align-items: baseline; gap: .5rem; }
-.counts b {
-  font-family: var(--display); font-size: 1.6rem; font-weight: 700;
-  letter-spacing: -.02em;
-}
-.counts span { font-size: .875rem; color: var(--ink-soft); }
-
-.org-wrap {
-  overflow-x: auto; overflow-y: hidden;
-  padding: 1.25rem 0 1.75rem;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: var(--stroke) transparent;
-}
-.org { width: 100%; min-width: 780px; height: auto; }
-
-/* état de boot — le JS retire .is-idle quand la section entre dans le viewport.
-   Scopé à .js : sans JavaScript, l'org-chart s'affiche entièrement, tout de suite. */
-.js .org-wrap.is-idle .n,
-.js .org-wrap.is-idle .e { opacity: 0; }
-
-.org .n {
-  cursor: pointer;
-  transform-box: fill-box; transform-origin: center;
-  transition: opacity .25s var(--ease);
-}
-.org .n rect { transition: stroke .18s var(--ease), fill .18s var(--ease); }
-.org .n:hover rect, .org .n:focus-visible rect { stroke: var(--accent); stroke-width: 1.8; }
-.org .e { transition: stroke-opacity .18s var(--ease), stroke-width .18s var(--ease); }
-
-/* branche allumée au survol/tap (piloté en JS) */
-.org .n.lit rect { stroke: var(--accent); stroke-width: 1.8; }
-.org .e.lit { stroke-opacity: 1; stroke-width: 2; }
-.org.has-lit .n:not(.lit) { opacity: .38; }
-.org.has-lit .e:not(.lit) { stroke-opacity: .12; }
-
-/* animation de boot : les nœuds cascadent, les traits se dessinent */
-@keyframes nodeIn { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
-@keyframes edgeIn { to { stroke-dashoffset: 0; } }
-.org-wrap.boot .n { animation: nodeIn .34s var(--ease) both; animation-delay: var(--d, 0ms); }
-.org-wrap.boot .e {
-  stroke-dasharray: var(--len, 300); stroke-dashoffset: var(--len, 300);
-  opacity: 1;
-  animation: edgeIn .5s var(--ease) both; animation-delay: var(--d, 0ms);
-}
-
-.org-role {
-  min-height: 2.6rem;
-  display: flex; align-items: center;
-  font-size: .9rem; color: var(--ink-soft);
-  padding: .6rem .9rem;
-  background: var(--bg); border-radius: 10px;
-  border: 1px solid var(--stroke);
-}
-.org-role b { color: var(--ink); font-weight: 600; }
-
-.system__bridge {
-  margin-top: 2.75rem; padding-top: 1.75rem;
-  border-top: 1px solid var(--stroke);
-  display: flex; flex-wrap: wrap; gap: 1rem 2rem;
-  align-items: center; justify-content: space-between;
-}
-.system__bridge p { font-size: 1.05rem; max-width: 40ch; }
-
-/* ---------- 3. Ce qu'il a produit --------------------------------------- */
-/* Zig-zag asymétrique. La rangée de 3 cartes égales est BANNIE (taste §7). */
-.work__head { max-width: 40rem; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
-
-.piece {
-  display: grid; gap: clamp(1.75rem, 4vw, 3.5rem);
-  align-items: center;
-  padding-block: clamp(2.25rem, 4vw, 3.25rem);
-  border-top: 1px solid var(--stroke);
-}
-.piece--wide { grid-template-columns: 1.1fr .9fr; }               /* Webivis : large */
-.piece--narrow { grid-template-columns: .85fr 1.15fr; }           /* StudyForge : miroir */
-.piece--narrow .piece__media { order: 2; }                        /* image à droite */
-
-.piece__media img {
-  width: 100%; border-radius: 14px;
-  border: 1px solid var(--stroke);
-  box-shadow: var(--shadow-md);
-  aspect-ratio: 16/10; object-fit: cover; object-position: top center;
-}
-.piece__body h3 { margin-bottom: .5rem; }
-.piece__role {
-  font-size: .8rem; font-weight: 600; letter-spacing: .04em;
-  color: var(--ink-soft); text-transform: uppercase;
-  margin-bottom: 1rem;
-}
-.piece__body p { margin-bottom: 1rem; max-width: 46ch; }
-.piece__status {
-  display: inline-flex; align-items: center; gap: .5rem;
-  font-size: .85rem; color: var(--ink-soft);
-  background: var(--bg); border: 1px solid var(--stroke);
-  padding: .35rem .75rem; border-radius: 999px;
-  margin-bottom: 1.35rem;
-}
-.piece--onsurface .piece__status { background: var(--surface); }
-.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
-.piece__links { display: flex; flex-wrap: wrap; gap: 1.25rem; }
-
-/* Oryzon : ni rangée ni carte — une bande scrollable. Sa preuve, c'est le visuel. */
-.strip {
-  display: flex; gap: 1rem;
-  overflow-x: auto; padding: .25rem .25rem 1.25rem;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin; scrollbar-color: var(--stroke) transparent;
-}
-.strip img {
-  width: 210px; flex: none;
-  aspect-ratio: 4/5; object-fit: cover;
-  border-radius: 12px; border: 1px solid var(--stroke);
-  scroll-snap-align: start;
-  box-shadow: var(--shadow-sm);
-  transition: transform .25s var(--ease), box-shadow .25s var(--ease);
-}
-.strip img:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-.strip::-webkit-scrollbar, .org-wrap::-webkit-scrollbar { height: 6px; }
-.strip::-webkit-scrollbar-thumb, .org-wrap::-webkit-scrollbar-thumb {
-  background: var(--stroke); border-radius: 999px;
-}
-
-/* ---------- 4. Le pari --------------------------------------------------- */
-.bet { background: var(--surface); border-block: 1px solid var(--stroke); }
-.bet__inner { max-width: 44rem; }
-.bet h2 { font-size: clamp(1.9rem, 4.2vw, 2.9rem); margin-bottom: 1.75rem; }
-.bet p { font-size: clamp(1.05rem, 1.9vw, 1.2rem); margin-bottom: 1.1rem; max-width: 52ch; }
-.bet p:last-child { margin-bottom: 0; }
-
-/* ---------- 5. Maintenant ------------------------------------------------ */
-.now__card {
-  background: var(--accent-pale);   /* orange pâle = SURFACE secondaire */
-  border-radius: 18px;
-  padding: clamp(1.6rem, 3.5vw, 2.5rem);
-  max-width: 44rem;
-}
-.now__date {
-  display: block; font-size: .8rem; font-weight: 600;
-  letter-spacing: .1em; text-transform: uppercase;
-  color: #8A5A2E;   /* MESURÉ : 4.96:1 sur #FCE9D6. #9C6B3F était à 3.87 → échec */
-  margin-bottom: 1.35rem;
-}
-.now__list { list-style: none; display: grid; gap: .9rem; }
-.now__list li { display: flex; gap: .75rem; align-items: flex-start; font-size: 1rem; }
-.now__list .i { width: 17px; height: 17px; flex: none; margin-top: .32rem; color: #8A5A2E; }
-
-/* ---------- 6. Le slot de conversion ------------------------------------ */
-/* UN composant. Le squelette ne bouge JAMAIS ; seul .offer__action change.
-   Modes : follow (aujourd'hui) · capture · lowticket · call → voir CONTENT.md */
-.offer__card {
-  background: var(--surface);
-  border: 1px solid var(--stroke);
-  border-radius: 20px;
-  padding: clamp(1.85rem, 4.5vw, 3.25rem);
-  box-shadow: var(--shadow-md);
-  max-width: 40rem;
-}
-.offer__card h2 { margin-bottom: 1rem; }
-.offer__body { color: #4A4741; margin-bottom: 1.85rem; max-width: 42ch; }
-.offer__action { display: flex; flex-wrap: wrap; gap: .75rem; }
-.offer__micro { margin-top: 1.1rem; font-size: .82rem; color: var(--ink-soft); }
-
-/* mode "capture" — prêt, dormant tant que la clé Brevo n'existe pas */
-.offer__form { display: flex; flex-wrap: wrap; gap: .75rem; width: 100%; }
-.offer__form input {
-  flex: 1 1 15rem;
-  font-family: var(--body); font-size: 1rem;
-  padding: .95rem 1.1rem;
-  border: 1px solid var(--stroke); border-radius: 12px;
-  background: var(--bg); color: var(--ink);
-}
-.offer__form input:focus-visible { border-color: var(--accent-deep); }
-.offer__msg { margin-top: .85rem; font-size: .9rem; min-height: 1.2rem; }
-.offer__msg[data-state="err"] { color: #B4441A; }
-.offer__msg[data-state="ok"] { color: #3D6B3D; }
-
-/* ---------- 7. Suivre / footer ------------------------------------------ */
-/* En DERNIER, volontairement : le visiteur VIENT de ces plateformes. */
-.foot { border-top: 1px solid var(--stroke); padding-block: 4rem 3rem; }
-.foot__grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 1.5rem; margin-bottom: 3rem;
-}
-.foot__col h3 { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--ink-soft); font-family: var(--body); font-weight: 600; margin-bottom: .9rem; }
-.foot__col ul { list-style: none; display: grid; gap: .55rem; }
-.foot__col a {
-  display: inline-flex; align-items: center; gap: .5rem;
-  text-decoration: none; font-size: .95rem;
-  transition: color .15s var(--ease);
-}
-.foot__col a:hover { color: var(--accent-deep); }
-.foot__col .i { width: 16px; height: 16px; color: var(--ink-soft); flex: none; }
-.foot__legal {
-  display: flex; flex-wrap: wrap; gap: .75rem 1.5rem;
-  justify-content: space-between; align-items: center;
-  padding-top: 1.75rem; border-top: 1px solid var(--stroke);
-  font-size: .82rem; color: var(--ink-soft);
-}
-
-/* ---------- Barre CTA mobile -------------------------------------------- */
-.bar {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
-  display: none;
-  padding: .75rem var(--gut) calc(.75rem + env(safe-area-inset-bottom));
-  background: rgba(247,242,234,.92);
-  backdrop-filter: blur(12px);
-  border-top: 1px solid var(--stroke);
-  transform: translateY(110%);
-  transition: transform .3s var(--ease);
-}
-.bar.up { transform: none; }
-.bar .btn { width: 100%; justify-content: center; }
-@media (max-width: 720px) { .bar { display: block; } }
-
-/* ---------- Reveal au scroll --------------------------------------------
-   ⚠️ Scopé à .js — posé dans le <head> avant le rendu. Sans JavaScript, RIEN
-   n'est masqué : la page entière est lisible. Une page dont le contenu dépend
-   d'un script est une page blanche le jour où le script tombe. */
-.js .rv { opacity: 0; transform: translateY(14px); }
-.js .rv.in { opacity: 1; transform: none; transition: opacity .55s var(--ease), transform .55s var(--ease); }
-
-/* ---------- Responsive --------------------------------------------------- */
-/* Toute mise en page asymétrique s'effondre en 1 colonne < 768px (taste, obligatoire) */
-@media (max-width: 800px) {
-  .piece--wide, .piece--narrow { grid-template-columns: 1fr; }
-  .piece--narrow .piece__media { order: 0; }
-  .system__bridge { flex-direction: column; align-items: flex-start; }
-  .counts { gap: 1.1rem 2rem; }
-  .foot { padding-bottom: 6.5rem; }   /* place pour la barre CTA */
-}
-@media (max-width: 420px) {
-  .strip img { width: 165px; }
-  .counts b { font-size: 1.35rem; }
-}
-
-/* ---------- prefers-reduced-motion : OBLIGATOIRE ------------------------- */
-/* L'information n'est JAMAIS derrière le mouvement. Le diagramme s'affiche
-   entièrement tracé, instantanément, et le survol/tap continue de marcher. */
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
-    animation-delay: 0ms !important;
-    transition-duration: .01ms !important;
-  }
-  .js .rv, .rv { opacity: 1; transform: none; }
-  .mark path { stroke-dashoffset: 0; }
-  .js .org-wrap.is-idle .n, .js .org-wrap.is-idle .e { opacity: 1; }
-  .org-wrap.boot .e { stroke-dashoffset: 0; }
+/* ═══ prefers-reduced-motion — l'info n'est JAMAIS derrière le mouvement ═══ */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0ms!important;
+    animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .js .rv,.rv{opacity:1;transform:none}
+  .ul path,.cr path{stroke-dashoffset:0}
+  .js .org-wrap.is-idle .n,.js .org-wrap.is-idle .e{opacity:1}
+  .org-wrap.boot .e{stroke-dashoffset:0}
+  .js .float{animation:none}
+  .grain{display:none}
 }
