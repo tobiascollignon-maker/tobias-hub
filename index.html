@@ -113,7 +113,7 @@
 <main>
 
   <!-- ═══ 1. HERO ═══ -->
-  <section class="hero" aria-labelledby="h-hero">
+  <section class="hero hero--photo" aria-labelledby="h-hero">
     <div class="wrap">
       <div class="hero__inner">
         <p class="eyebrow">Tobias Collignon · 18 ans · Belgique</p>
@@ -145,6 +145,14 @@
           </a>
         </div>
       </div>
+
+      <!-- Le fond du portrait est TAUPE, la page est BEIGE : deux neutres chauds.
+           Pas de cadre blanc (le rectangle se verrait) — un liseré fin + une ombre
+           teintée chaud suffisent : la photo appartient à la page. Zéro orange ici,
+           la marque orange est déjà dépensée sur le trait du titre. -->
+      <figure class="hero__portrait">
+        <img src="/assets/img/tobias.jpg" alt="Tobias Collignon" width="800" height="1000" fetchpriority="high" decoding="async">
+      </figure>
     </div>
   </section>
 

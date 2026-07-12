@@ -204,20 +204,35 @@ h3 {
 }
 .hero__cta { display: flex; flex-wrap: wrap; gap: .9rem 1.4rem; align-items: center; }
 
-/* Prêt pour la photo : dès que assets/img/tobias.jpg existe, ajouter .hero--photo
-   sur <section class="hero"> et décommenter <figure class="hero__portrait"> */
+/* Portrait — asymétrie 1.2/0.8 (pas 50/50 : le texte porte, la photo accompagne) */
 .hero--photo .wrap {
-  display: grid; grid-template-columns: 1.15fr .85fr;
-  gap: clamp(2rem, 5vw, 4rem); align-items: center;
+  display: grid; grid-template-columns: 1.2fr .8fr;
+  gap: clamp(2rem, 5vw, 4.5rem); align-items: center;
 }
+.hero__portrait { position: relative; }
 .hero__portrait img {
-  width: 100%; border-radius: 20px;
-  box-shadow: var(--shadow-lg);
-  aspect-ratio: 4/5; object-fit: cover;
+  width: 100%;
+  aspect-ratio: 4/5; object-fit: cover; object-position: center 22%;
+  border-radius: 18px;
+  border: 1px solid var(--stroke);   /* liseré chaud : marie le taupe de la photo au beige */
+  box-shadow: var(--shadow-lg);      /* ombre TEINTÉE chaud, jamais grise */
 }
+/* Un halo beige très doux sous la photo : elle repose sur la page au lieu d'y être collée. */
+.hero__portrait::after {
+  content: ""; position: absolute; inset: auto 6% -14px 6%;
+  height: 26px; border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(138,133,120,.18), transparent 70%);
+  z-index: -1;
+}
+
+/* Mobile : le portrait passe AU-DESSUS du texte, en bandeau court.
+   On ne le masque plus — le visiteur vient d'Instagram, il veut voir la personne. */
 @media (max-width: 860px) {
-  .hero--photo .wrap { grid-template-columns: 1fr; }
-  .hero__portrait { display: none; }   /* mobile : la parole d'abord */
+  .hero--photo .wrap { grid-template-columns: 1fr; gap: 2rem; }
+  .hero__portrait { order: -1; max-width: 172px; }
+  /* rond : lit comme un avatar. 8% (et non 22%) sinon le haut des cheveux est rogné. */
+  .hero__portrait img { aspect-ratio: 1/1; border-radius: 50%; object-position: center 8%; }
+  .hero__portrait::after { display: none; }
 }
 
 /* ---------- 2. Le système (l'élément SIGNATURE) -------------------------- */
