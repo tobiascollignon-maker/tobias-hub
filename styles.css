@@ -336,6 +336,28 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
 .piece__body p{color:var(--ink-2);margin-bottom:1.1rem;max-width:46ch}
 .piece__links{display:flex;flex-wrap:wrap;gap:1.25rem;margin-top:1.25rem}
 
+/* ── La bande Oryzon : le travail EST la preuve, donc on le montre en grand.
+   Défilement horizontal + scroll-snap : sur mobile, une grille de 4 vignettes
+   rendrait chaque visuel illisible — or c'est le visuel qui vend. ── */
+/* min-width:0 — SANS ÇA, RIEN NE MARCHE. Un enfant de grille a min-width:auto : il refuse
+   de descendre sous la largeur de son contenu (4×300px), donc il déborde la page au lieu
+   de déclencher son overflow-x. C'est la cause n°1 des scrolls horizontaux fantômes. */
+.strip{margin-top:2.5rem;grid-column:1/-1;min-width:0}
+.strip__rail{display:flex;gap:1.1rem;overflow-x:auto;padding:.5rem .25rem 1.25rem;
+  scroll-snap-type:x mandatory;scrollbar-width:thin;
+  scrollbar-color:var(--hairline-2) transparent;
+  /* les visuels se fondent dans le papier au bord, au lieu d'être tranchés net */
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 2.5%,#000 97.5%,transparent);
+  mask-image:linear-gradient(to right,transparent,#000 2.5%,#000 97.5%,transparent)}
+.strip__rail::-webkit-scrollbar{height:6px}
+.strip__rail::-webkit-scrollbar-thumb{background:var(--hairline-2);border-radius:var(--r-pill)}
+.strip__rail img{flex:0 0 auto;width:min(300px,72vw);height:auto;aspect-ratio:1;object-fit:cover;
+  border-radius:var(--r-lg);box-shadow:var(--edge),var(--shadow-lg);scroll-snap-align:center;
+  transition:transform .28s var(--ease),box-shadow .28s var(--ease)}
+.strip__rail img:hover{transform:translateY(-3px) scale(1.012);box-shadow:var(--edge),var(--shadow-xl)}
+.strip figcaption{font-size:var(--t-caption);color:var(--ink-3);padding-left:.25rem}
+.strip .muted{opacity:.62}
+
 /* ═══ 4. LE PARI — CENTRÉ, titre RÉDUIT (il criait, surtout sur mobile) ═══ */
 .bet{background:var(--card);border-block:1px solid var(--hairline)}
 .bet__inner{max-width:54rem;margin-inline:auto;text-align:center}
