@@ -5,6 +5,11 @@
    ============================================================================ */
 (() => {
   'use strict';
+
+  // Signe la présence : désarme le filet de sécurité de boot.js, qui sans ça
+  // révélerait tout au bout de 3s en supposant que ce fichier n'a jamais tourné.
+  document.documentElement.dataset.ready = '1';
+
   const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---- Reveal ------------------------------------------------------------ */
