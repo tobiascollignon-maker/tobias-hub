@@ -21,8 +21,9 @@
 <link rel="preload" href="/assets/fonts/DMSerifDisplay-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/styles.css">
 
-<!-- .js posé AVANT le rendu : le CSS ne masque rien si le JS ne tourne pas. -->
-<script>document.documentElement.classList.add('js');</script>
+<!-- .js posé AVANT le rendu. ⛔ FICHIER EXTERNE, JAMAIS INLINE : la CSP impose
+     script-src 'self', donc un <script> inline est bloqué EN SILENCE (voir boot.js). -->
+<script src="/boot.js"></script>
 
 <script type="application/ld+json">
 {

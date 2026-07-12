@@ -56,6 +56,27 @@ Mettre du blanc dessus rendrait le seul CTA de la page illisible en plein soleil
 La charte interdit les fonds sombres. `taste` recommande le double mode ; la charte prime
 (`taste` défère explicitement aux chartes verrouillées). Clair uniquement.
 
+### 4. ⛔ Aucun `<script>` inline. Jamais.
+
+`vercel.json` impose `script-src 'self'` — **sans** `'unsafe-inline'`, sans nonce, sans hash.
+Un `<script>` inline est donc **bloqué en silence** : pas d'erreur console, pas de page
+blanche. Il ne s'exécute simplement pas.
+
+**Ça s'est produit.** Le bootstrap `document.documentElement.classList.add('js')` était inline.
+Il n'a jamais tourné en prod → la classe `.js` n'a jamais été posée → **18 règles CSS mortes
+d'un coup** : tous les éléments flottants figés, et surtout **les deux tracés orange à la main
+(le soulignement du H1, le cercle autour de « 30 ans ») devenus invisibles**. La signature
+visuelle de la page a disparu pendant des jours sans qu'aucun test ne se plaigne.
+
+- Le bootstrap vit désormais dans **`boot.js`** (externe, synchrone, dans le `<head>`).
+- Les tracés sont **visibles par défaut** ; on ne les escamote que sous `.js`, c'est-à-dire
+  seulement si on est capable de les dessiner. Ils ne peuvent plus disparaître.
+- **Si tu as besoin d'un script inline : ne l'ajoute pas.** Crée un fichier. Et surtout,
+  **n'ajoute pas `'unsafe-inline'` à la CSP** — ce repo est public.
+
+> **La leçon générale :** un durcissement de sécurité se vérifie sur la **page rendue**, jamais
+> sur le fichier de config. Ici, la CSP protégeait un site qu'elle venait elle-même de casser.
+
 ---
 
 ## Les chiffres ne sont pas tapés à la main

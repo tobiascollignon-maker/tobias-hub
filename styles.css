@@ -60,7 +60,9 @@
   --font-accent-script:'Caveat','Segoe Script',cursive;
 
   --t-display:clamp(3.25rem,1.6rem + 5.6vw,5rem);
-  --t-h1:clamp(2.6rem,1.7rem + 3.2vw,3.75rem);
+  /* H1 : était 3.75rem (60px) — trop lourd face aux titres de section (46px).
+     Ramené à 48px : on lit "la même taille", et le hero garde juste 2px de primauté. */
+  --t-h1:clamp(2.25rem,1.5rem + 2.5vw,3rem);
   --t-h2:clamp(2rem,1.4rem + 2.2vw,2.875rem);
   --t-h3:clamp(1.5rem,1.2rem + 1.1vw,2rem);
   --t-lead:1.25rem; --t-body:1.0625rem; --t-small:.9375rem; --t-caption:.8125rem;
@@ -156,17 +158,31 @@ p .acc, p .acc-s, li .acc, li .acc-s{color:var(--orange-txt)}
   padding:0 .12em;border-radius:2px;
   -webkit-box-decoration-break:clone;box-decoration-break:clone;
 }
-/* soulignement tracé main */
+/* ── LES DEUX TRACÉS À LA MAIN — la signature de la page ──────────────────
+   Le trait sous le H1 et le cercle autour de "30 ans". C'est le SEUL endroit
+   où l'orange est un geste et pas une surface : il porte toute la direction.
+
+   ⚠️ Ils étaient CACHÉS par défaut (stroke-dashoffset = longueur totale) et ne
+   se révélaient que via `.js .draw`. Résultat : le jour où .js n'a pas été posée
+   (CSP → script inline bloqué), ils sont devenus INVISIBLES en prod. Pas
+   "immobiles" : absents. La page a perdu sa signature sans qu'aucune erreur ne
+   s'affiche.
+
+   Donc on inverse la logique : le tracé est VISIBLE par défaut. On ne le cache
+   que si on est capable de le DESSINER (JS présent). Un tracé ne peut plus
+   jamais disparaître — au pire, il ne s'anime pas. ── */
 .ul{position:relative;display:inline-block}
 .ul svg{position:absolute;left:-2%;bottom:-.34em;width:104%;height:.5em;overflow:visible;pointer-events:none}
-.ul path{fill:none;stroke:var(--orange);stroke-width:4.2;stroke-linecap:round;
-  stroke-dasharray:var(--len,320);stroke-dashoffset:var(--len,320)}
-.js .ul.draw path{animation:draw .8s var(--ease) forwards}
+.ul path{fill:none;stroke:var(--orange);stroke-width:4.2;stroke-linecap:round}
 /* cercle tracé main */
 .cr{position:relative;display:inline-block;padding:0 .2em}
 .cr svg{position:absolute;left:-7%;top:-24%;width:114%;height:150%;overflow:visible;pointer-events:none}
-.cr path{fill:none;stroke:var(--orange);stroke-width:3.4;stroke-linecap:round;
-  stroke-dasharray:var(--len,700);stroke-dashoffset:var(--len,700)}
+.cr path{fill:none;stroke:var(--orange);stroke-width:3.4;stroke-linecap:round}
+
+/* On ne l'escamote QUE si le JS pourra le tracer. */
+.js .ul[data-draw] path{stroke-dasharray:var(--len,320);stroke-dashoffset:var(--len,320)}
+.js .cr[data-draw] path{stroke-dasharray:var(--len,700);stroke-dashoffset:var(--len,700)}
+.js .ul.draw path{animation:draw .8s var(--ease) forwards}
 .js .cr.draw path{animation:draw 1s var(--ease) forwards}
 @keyframes draw{to{stroke-dashoffset:0}}
 
@@ -517,7 +533,10 @@ p .acc, p .acc-s, li .acc, li .acc-s{color:var(--orange-txt)}
   *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0ms!important;
     animation-iteration-count:1!important;transition-duration:.01ms!important}
   .js .rv,.rv{opacity:1;transform:none}
-  .ul path,.cr path{stroke-dashoffset:0}
+  /* Les tracés s'affichent ENTIERS, tout de suite. Sélecteur aussi spécifique que
+     la règle qui les escamote (.js .ul[data-draw] path), sinon il perdrait la
+     cascade et le trait resterait invisible — l'info n'est jamais derrière le mouvement. */
+  .js .ul[data-draw] path,.js .cr[data-draw] path,.ul path,.cr path{stroke-dashoffset:0}
   .js .org-wrap.is-idle .n,.js .org-wrap.is-idle .e{opacity:1}
   .org-wrap.boot .e{stroke-dashoffset:0}
   .js .float{animation:none}
