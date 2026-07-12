@@ -39,8 +39,12 @@
      (bouton, pastille, trait, cercle, surligneur, connecteurs) : pas de seuil.
      Dès que l'orange devient du TEXTE, il faut le foncer — mesuré, pas supposé. */
   --orange:#E96A2B;          /* surfaces & tracés — le hex de marque, inchangé */
-  --orange-txt:#B24712;      /* petit texte (liens, pastilles) — 5.17:1 ✅ */
-  --orange-acc:#E75F1C;      /* mot-accent, GRAND texte (≥24px) — 3.25:1 ✅ */
+  --orange-txt:#B24712;      /* petit texte (liens, pastilles, accent DANS un § ) — 4.75:1 mini ✅ */
+  /* ⚠️ était #E75F1C : mesuré à 3.25:1 sur le papier CLAIR — mais la page a DEUX fonds clairs,
+     et sur le sable (--paper-2, la section "système") il tombait à 2.98:1 → ÉCHEC, même au
+     seuil "grand texte". Une couleur ne se valide pas sur un seul fond.
+     #C85017 tient ≥3.91:1 sur les trois surfaces claires, et 4.06:1 sur la carte nuit. */
+  --orange-acc:#C85017;      /* mot-accent, GRAND texte (≥24px) — 3.91:1 mini ✅ */
   --orange-deep:#C1531C;     /* hover / press */
   --orange-soft:#FBE6D4; --orange-line:#F3C09A;
   --marker:#F8C58F; --marker-glow:rgba(233,106,43,.26);
@@ -137,6 +141,14 @@ h3{font-size:var(--t-h3);font-weight:600;line-height:1.2;letter-spacing:-.01em}
 .acc{font-family:var(--font-accent-serif);font-style:italic;font-weight:400;color:var(--orange-acc);font-size:1.02em}
 /* mot-accent : manuscrit */
 .acc-s{font-family:var(--font-accent-script);font-weight:700;color:var(--orange-acc);font-size:1.2em;line-height:1}
+/* ⚠️ Un mot-accent DANS un paragraphe n'est plus du « grand texte ».
+   WCAG : grand texte = ≥24px, ou ≥18.66px en gras. Le mot-accent d'un titre (33-44px) passe
+   au seuil 3:1 ; le même mot dans un § (17-20px, et en 400 pour le serif) tombe au seuil
+   NORMAL de 4.5:1 — mesuré à 2.87:1, il échouait. Même classe, deux contextes, deux seuils.
+   Dans du corps de texte, l'accent prend donc l'orange foncé (4.75:1 mini). */
+p .acc, p .acc-s, li .acc, li .acc-s{color:var(--orange-txt)}
+/* …sauf sur la carte nuit, où le fond est sombre : là, l'orange clair est le plus lisible. */
+.offer__card p .acc, .offer__card p .acc-s{color:var(--orange)}
 /* surligneur */
 .hl{
   background-image:linear-gradient(120deg,var(--marker-glow),var(--marker-glow));
