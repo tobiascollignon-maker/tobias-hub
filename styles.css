@@ -128,9 +128,17 @@ section{padding-block:clamp(4.5rem,10vw,7rem)}
 .eyebrow{
   font-size:var(--t-caption);font-weight:600;letter-spacing:var(--tr-eyebrow);
   text-transform:uppercase;color:var(--ink-3);margin-bottom:1.15rem;
-  display:inline-flex;align-items:center;gap:.55rem;
+  /* ⚠️ `align-items:center` centrait le tiret sur le BLOC de texte, pas sur sa 1re ligne.
+     Invisible tant que l'eyebrow tient sur une ligne — mais « TOBIAS COLLIGNON · 18 ANS ·
+     BELGIQUE » en fait deux dès 390px (mesuré : 42px de haut) et le tiret se posait alors
+     à 21px, pile dans l'INTERLIGNE : un trait orange flottant qui ne souligne rien. */
+  display:inline-flex;align-items:flex-start;gap:.55rem;
 }
-.eyebrow::before{content:"";width:18px;height:1px;background:var(--orange-line)}
+/* .81em = la moitié de l'interligne (21.06px / 13px de fonte). Le tiret se centre donc sur
+   la 1re ligne — et la formule vaut aussi quand il n'y en a qu'une : un seul comportement,
+   pas un cas particulier par nombre de lignes. */
+.eyebrow::before{content:"";width:18px;height:1px;background:var(--orange-line);
+  margin-top:.81em;flex:none}
 
 h1{font-size:var(--t-h1);font-weight:800;line-height:var(--lh-snug);letter-spacing:var(--tr-tight);text-wrap:balance}
 h2{font-size:var(--t-h2);font-weight:700;line-height:var(--lh-snug);letter-spacing:var(--tr-tight);text-wrap:balance}
@@ -259,8 +267,13 @@ p .acc, p .acc-s, li .acc, li .acc-s{color:var(--orange-txt)}
 .portrait{position:relative;display:grid;place-items:end center;min-height:min(72vh,620px)}
 /* Le sujet est détouré au niveau de la poitrine → sans masque il se termine par une ligne
    droite qui hurle « image découpée ». Le dégradé le fait se DISSOUDRE dans le papier. */
+/* ⚠️ `max-width:540px` était du CODE MORT : la colonne du portrait (.94fr d'un --max de
+   1120px) plafonne à ~466px — la règle ne s'est jamais appliquée, à aucune largeur.
+   Le levier réel est le width en %, pas le max-width. Le sujet déborde donc légèrement
+   sa colonne, centré (place-items:… center) : il déborde dans la gouttière (48px), jamais
+   sur le texte. Le max-width ne sert plus que de plafond dur sur très grand écran. */
 .portrait img{
-  width:100%;max-width:540px;position:relative;z-index:2;
+  width:112%;max-width:600px;position:relative;z-index:2;
   filter:drop-shadow(0 22px 38px rgba(58,42,22,.18));
   -webkit-mask-image:linear-gradient(to bottom,#000 76%,rgba(0,0,0,.55) 90%,transparent 100%);
   mask-image:linear-gradient(to bottom,#000 76%,rgba(0,0,0,.55) 90%,transparent 100%);
@@ -304,7 +317,6 @@ p .acc, p .acc-s, li .acc, li .acc-s{color:var(--orange-txt)}
 .js .float--6{animation-delay:-3.1s;animation-duration:7.4s}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(var(--rot,0deg))}
                50%{transform:translateY(-10px) rotate(var(--rot,0deg))}}
-@media(max-width:980px){.float{display:none}}
 
 /* ── Flottants d'AMBIANCE sur les autres sections (demande Tobias).
    ⚠️ Ils étaient ancrés au bord de l'ÉCRAN (left:2.2%) — donc collés au bord sur un grand
@@ -327,8 +339,58 @@ p .acc, p .acc-s, li .acc, li .acc-s{color:var(--orange-txt)}
 @media(max-width:900px){
   .hero{min-height:auto;padding-block:6.5rem 3rem}
   .hero .wrap{grid-template-columns:1fr;gap:1.5rem}
-  .portrait{order:-1;min-height:0;max-width:250px;margin-inline:auto}
-  .portrait img{max-width:250px}
+  /* Le portrait porte les pastilles : sa largeur est leur système de coordonnées.
+     Élargi de 250 → 285, elles gagnent de la place en même temps que lui.
+
+     ⚠️ `min(…, 76vw)` n'est pas de la coquetterie, c'est ce qui tient la promesse « zéro
+     scroll horizontal ». Les pastilles débordent volontairement du portrait (left:-13%…) :
+     leur place, c'est la MARGE entre le portrait et le bord de l'écran. Or cette marge
+     rétrécit avec l'écran quand le portrait, lui, est figé — à 320px, mesuré : 285px de
+     portrait ne laissent que 17px de marge pour un débordement de 37px, et la page partait
+     à 336px de large. En liant le portrait au viewport, la marge redevient proportionnelle
+     et les pastilles retombent dedans, à toutes les largeurs.
+     Sans effet au-dessus de 365px (285/0.76) : le mobile courant ne change pas. */
+  .portrait{order:-1;min-height:0;max-width:min(285px, 76vw);margin-inline:auto}
+  /* Le width:112% du desktop (qui fait déborder le sujet dans la gouttière) n'a pas de sens
+     ici : il n'y a plus de gouttière, et il désolidariserait l'image de la boîte qui sert de
+     repère aux pastilles. Sur mobile, l'image EST la boîte. */
+  .portrait img{width:100%;max-width:none}
+
+  /* ── Les pastilles flottantes sur mobile (elles étaient purement et simplement
+     `display:none` sous 980px — donc absentes de l'écran que 100% des visiteurs de bio
+     Instagram utilisent : le hero mobile perdait sa seule respiration visuelle).
+     Elles ne sont pas décoratives : ce sont les 3 marques + les canaux réels.
+
+     Elles sont RÉDUITES et repoussées vers les bords : à 285px, une pastille pleine taille
+     couvrirait le visage. Les positions sont recalculées, pas héritées — les % du desktop
+     s'appliquent à une boîte 40% plus petite et les auraient toutes empilées sur le sujet. */
+  .float{font-size:.76rem;padding:.42rem .72rem;gap:.4rem}
+  .float--ico{width:38px;height:38px;border-radius:12px}
+  .float--ico .i{width:17px;height:17px}
+  .float--brand .i{width:19px;height:19px}
+  .float .dot{width:5px;height:5px}
+  /* L'amplitude du flottement suit la taille : -10px sur une pastille de 38px, ça tressaute. */
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(var(--rot,0deg))}
+                 50%{transform:translateY(-6px) rotate(var(--rot,0deg))}}
+
+  .float--1{top:-1%;   left:-13%;  right:auto}
+  .float--2{top:27%;   right:-13%; left:auto}
+  .float--3{bottom:12%;left:-11%;  right:auto}
+  .float--4{top:3%;    right:1%;   left:auto}   /* remontée : à 13% elle chevauchait --2 */
+  .float--5{bottom:1%; right:3%;   left:auto}
+  .float--6{bottom:30%;left:-1%;   right:auto}
+}
+
+/* ── Sous 360px, les débordements se resserrent. Pourquoi un palier de plus, alors que le
+   portrait est déjà lié au viewport : `vw` compte la BARRE DE DÉFILEMENT, pas `clientWidth`.
+   Sur un vrai téléphone les deux sont égaux et tout va bien ; dans une fenêtre de bureau
+   rétrécie à 320px, la barre en mange 15 — le portrait se dimensionne sur 320 pendant que
+   l'espace réel n'est que de 305, et la pastille sortait de 0,7px. Mesuré, pas supposé.
+   On rogne les OFFSETS plutôt que le portrait : Tobias l'a demandé plus grand, il le reste. ── */
+@media(max-width:360px){
+  .float--1{left:-7%}
+  .float--2{right:-7%}
+  .float--3{left:-6%}
 }
 
 /* ═══ 2. LE SYSTÈME — TOUT est centré (demande Tobias).
@@ -345,10 +407,95 @@ p .acc, p .acc-s, li .acc, li .acc-s{color:var(--orange-txt)}
 .system .can__i{text-align:left}
 .system .ambition{max-width:46rem;margin-inline:auto;text-align:center}
 .system .counts{justify-content:center}
-.system .org-toggle-wrap{display:flex;justify-content:center}
-.system .org-role{justify-content:center;text-align:center}
 .system__bridge{align-items:center;text-align:center}
 .system__bridge p{margin-inline:auto}
+
+/* ═══ LE DOSSIER — l'accroche de la section (retour Tobias 16/07 : l'org-chart « est moche »)
+   « Un APERÇU d'un dossier bleu » (ses mots) = le Finder : le dossier POSÉ sur la fenêtre qui
+   montre ce qu'il contient. Le chevauchement dit « ceci → son contenu » sans flèche ni mot.
+   ⚠️ 1re version RATÉE : les documents étaient tuilés ENTRE le dos et le rabat. Le rabat
+   masquait la 6e ligne (`.mcp.json`) — un des chiffres demandés. Structurel, pas réglable :
+   un dossier de ratio 1,24 fait 358px de haut pour 443 de large, et un vrai dossier ne montre
+   jamais ses feuilles, seulement leur tranche. La métaphore coûtait la donnée. Voir
+   scripts/gen_org_svg.py § FOLDER_BACK.
+   ⚠️ Le bleu n'est pas un second accent : c'est un OBJET DÉPEINT (defs #fd-b, index.html).
+   L'orange reste seul sur tout ce qui porte emphase ou interaction. */
+.fold{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1fr);
+  gap:clamp(1.5rem,4vw,3.5rem);align-items:center;margin-bottom:1.75rem}
+
+.fold__art{position:relative;display:grid;justify-items:center}
+.fold__ico{justify-self:start;width:44%;max-width:178px;height:auto;display:block;
+  margin-left:6%;margin-bottom:-24px;position:relative;z-index:1;
+  transform:rotate(-4deg);transform-origin:bottom center;
+  filter:drop-shadow(0 13px 18px rgba(20,48,86,.24))}
+.fold__win{position:relative;z-index:2;width:100%;background:var(--card);
+  border-radius:var(--r-md);box-shadow:var(--edge),var(--shadow-lg);overflow:hidden}
+.fw-bar{display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:.6rem .85rem;background:var(--card-tint);border-bottom:1px solid var(--hairline)}
+.fw-t{font-size:.8125rem;font-weight:700;color:var(--ink)}
+.fw-c{font-size:var(--t-caption);color:var(--ink-3);font-variant-numeric:tabular-nums}
+.fw-l{list-style:none;margin:0;padding:.25rem}
+.fw-r{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;
+  gap:.5rem;padding:.42rem .6rem}
+.fw-r + .fw-r{border-top:1px solid var(--hairline)}
+.fw-i{width:15px;height:15px;color:#3A87D4}
+.fw-p{font-size:.8125rem;font-weight:600;color:var(--ink);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fw-m{font-size:.75rem;color:var(--ink-3);white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* Le SEUL dossier ouvert : celui que la page vend. Il porte les 6 pôles. */
+.fw-r--open .fw-i{color:var(--orange)}
+.fw-r--open .fw-p{font-weight:700}
+/* Les 6 pôles, en retrait, tenus par un rail orange — le même geste que les connecteurs de
+   l'ancien diagramme. C'est LUI qui porte la hiérarchie, maintenant. */
+.fw-r--sub{padding-left:1.55rem;position:relative}
+.fw-r--sub::before{content:"";position:absolute;left:.95rem;top:0;bottom:0;
+  width:1.5px;background:var(--orange-line)}
+.fw-r--sub + .fw-r:not(.fw-r--sub){border-top:1px solid var(--hairline)}
+.fw-r--sub .fw-p{font-weight:500;color:var(--ink-2)}
+/* L'effectif du pôle : tabulaire, à droite, il se COMPARE d'un coup d'œil — c'est là que
+   « Marketing 28 » face à « Delivery 1 » devient une information et pas un chiffre. */
+.fw-r--sub .fw-m{font-weight:700;color:var(--ink)}
+
+/* LA CHAÎNE — l'org-chart en trois lignes. Le rail orange EST la délégation ;
+   1 → 6 → 52 est la cascade. Les corps GRANDISSENT avec la cascade : l'uniformité
+   (tout au même corps) est le tell n°1 de la génération automatique (doctrine §3.4). */
+/* ⚠️ La respiration est calibrée sur la FENÊTRE, pas choisie : depuis que les 6 pôles y sont
+   ouverts, elle fait 12 lignes (~650px). Une chaîne serrée à côté flottait dans un vide.
+   Les 3 lignes doivent tenir la colonne, pas la décorer. */
+.chain{list-style:none;margin:0;padding:0;display:grid;gap:2.1rem;position:relative}
+/* ⚠️ Le rail est tracé PAR CHAQUE MAILLON vers le suivant, pas d'un trait unique sur toute
+   la chaîne. Un trait absolu (top/bottom) doit DEVINER la hauteur de la dernière ligne —
+   qui varie dès qu'une description passe à la ligne (elle le fait sous 900px). Il dépassait
+   donc sous le dernier point. Tracé maillon par maillon, il s'arrête là où il doit, toujours.
+   Et c'est LUI la cascade : point → trait → point → trait. */
+.ch-i:not(:last-child)::after{content:"";position:absolute;left:4px;top:1.15rem;
+  height:calc(100% + 1.67rem);width:1.5px;background:var(--orange-line);transform-origin:top}
+/* ⚠️ Colonne de chiffres FIXE (3,8rem), pas `auto` + min-width : un `min-width` ne contraint
+   rien dès que le contenu le dépasse, et « 52 » à 44px fait ~53px. Une colonne fixe aligne
+   les 3 chiffres ET les 3 libellés, quels que soient les corps. */
+.ch-i{display:grid;grid-template-columns:4.7rem minmax(0,1fr);column-gap:1rem;
+  padding-left:1.6rem;position:relative}
+.ch-i::before{content:"";position:absolute;left:0;top:.72rem;width:9px;height:9px;
+  border-radius:50%;background:var(--orange);box-shadow:0 0 0 3.5px var(--paper-2)}
+/* ⚠️ Ni `ch` ni `min-width` (essayés, mesurés, faux tous les deux) : `ch` dépend du corps, or
+   les corps ESCALADENT ici (1,5 → 1,95 → 2,75rem) → bords droits à 819/830/851px. Et un
+   `min-width` cesse de contraindre dès que le contenu le dépasse → 759/759/771px. C'est la
+   COLONNE qui aligne, pas le chiffre. */
+.ch-n{grid-row:1/3;align-self:center;font-weight:800;letter-spacing:var(--tr-tight);
+  line-height:1;font-variant-numeric:tabular-nums;text-align:right}
+.ch-i:nth-child(1) .ch-n{font-size:1.75rem}
+.ch-i:nth-child(2) .ch-n{font-size:2.35rem}
+.ch-i:nth-child(3) .ch-n{font-size:3.4rem}
+.ch-t{font-weight:700;font-size:1.0625rem;line-height:1.25}
+.ch-d{font-size:var(--t-small);color:var(--ink-3);line-height:1.45}
+
+/* La phrase de Tobias, mot pour mot. Elle porte la section — d'où le serif, réservé. */
+.fold__say{font-family:var(--font-accent-serif);font-size:var(--t-h3);line-height:1.22;
+  text-align:center;max-width:24ch;margin:0 auto 1.5rem;color:var(--ink)}
+/* ≥24px = "grand texte" → --orange-acc suffit (3,91:1 mini). La règle `p .acc` le
+   forcerait à --orange-txt, calibré pour du PETIT texte : trop foncé ici. */
+.fold__say .acc{color:var(--orange-acc)}
 
 .counts{display:flex;flex-wrap:wrap;gap:1.5rem 2.75rem;padding:1.4rem 0;margin-bottom:1.75rem;
   border-block:1px solid var(--hairline)}
@@ -356,45 +503,125 @@ p .acc, p .acc-s, li .acc, li .acc-s{color:var(--orange-txt)}
 .counts b{font-size:1.75rem;font-weight:800;letter-spacing:var(--tr-tight)}
 .counts span{font-size:var(--t-small);color:var(--ink-3)}
 
-/* L'org-chart prend de la place → il est REPLIÉ par défaut.
-   Qui veut le voir l'ouvre ; les autres passent à la suite. */
-.org-toggle{display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;
-  font-family:var(--font-sans);font-size:1rem;font-weight:600;
-  padding:.85rem 1.5rem;border-radius:var(--r-pill);border:0;
-  background:var(--card);color:var(--ink);box-shadow:var(--edge),var(--shadow-sm);
-  transition:transform .18s var(--ease),box-shadow .18s var(--ease)}
-.org-toggle:hover{transform:translateY(-3px);box-shadow:var(--edge),var(--shadow-md)}
-.org-toggle .i{width:17px;height:17px;transition:transform .28s var(--ease)}
-.org-toggle[aria-expanded="true"] .i{transform:rotate(180deg)}
+/* LE TEMPLATE — le produit. ⚠️ Pas de .btn--primary ici : la barre collante en porte déjà
+   un, et deux CTA orange simultanés = deux CTA (défaut corrigé le 16/07). --ghost était du
+   code MORT (défini, jamais utilisé) : il reprend du service au lieu d'un 3e bouton. */
+.tmpl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1.25rem 2.5rem;
+  align-items:center;background:var(--card);border-radius:var(--r-lg);
+  padding:clamp(1.35rem,3vw,2rem);box-shadow:var(--edge),var(--shadow-sm);
+  margin-bottom:2rem;text-align:left}
+/* `.system .eyebrow` centre TOUS les eyebrows de la section — mais cette carte-ci est ferrée
+   à gauche. Sans ça : un eyebrow centré au-dessus d'un titre ferré à gauche. (0,2,1) bat (0,2,0). */
+.system .tmpl .eyebrow{justify-content:flex-start;width:auto}
+.tmpl h3{font-size:var(--t-h3);line-height:var(--lh-snug);margin:.3rem 0 .55rem}
+.tmpl__l p{font-size:var(--t-body);color:var(--ink-2);max-width:54ch}
+.tmpl__s{display:flex;align-items:center;gap:.5rem;margin-top:.85rem;
+  font-size:var(--t-small);color:var(--ink-3)}
+.tmpl__r{display:grid;gap:.85rem;justify-items:center}
+.tmpl__price{display:grid;justify-items:center;gap:.1rem}
+.tmpl__price b{font-size:2.5rem;font-weight:800;letter-spacing:var(--tr-tight);line-height:1}
+.tmpl__price span{font-size:var(--t-caption);color:var(--ink-3)}
 
-.org-panel{overflow:hidden;height:0;transition:height .5s var(--ease)}
-.org-panel[hidden]{display:block}          /* on anime, on ne coupe pas */
-.org-inner{padding-top:1.75rem}
+/* ═══ MOTION — § LE SYSTÈME ══════════════════════════════════════════════════════
+   Skill `web-motion` : composited ONLY (transform/opacity — jamais top/left/width/height),
+   ease-out à l'entrée, stagger ~40ms, « purpose over décoration ».
+   La chorégraphie RACONTE, elle ne décore pas : le dossier se pose → sa fenêtre en sort →
+   les lignes se déposent une à une → le rail de délégation descend du co-CEO vers les 52 →
+   les pastilles éclosent → les chiffres se comptent (main.js).
 
-.org-wrap{overflow-x:auto;overflow-y:hidden;padding:.5rem 0 1.25rem;-webkit-overflow-scrolling:touch;
-  scrollbar-width:thin;scrollbar-color:var(--hairline-2) transparent}
-.org{width:100%;min-width:780px;max-width:1018px;height:auto;margin-inline:auto;display:block}
-.js .org-wrap.is-idle .n,.js .org-wrap.is-idle .e{opacity:0}
-.org .n{cursor:pointer;transform-box:fill-box;transform-origin:center;transition:opacity .25s var(--ease)}
-/* Les nœuds sont SOMBRES (générés par gen_org_svg.py). Au survol, on ne peut donc plus
-   jouer sur le contour seul : on ajoute une lueur orange, visible sur du noir. */
-.org .n rect{transition:stroke .18s var(--ease),fill .18s var(--ease),filter .18s var(--ease)}
-.org .n:hover rect,.org .n:focus-visible rect{stroke:var(--orange);stroke-width:2;
-  filter:drop-shadow(0 0 7px rgba(233,106,43,.55))}
-.org .e{transition:stroke-opacity .18s var(--ease),stroke-width .18s var(--ease)}
-.org .n.lit rect{stroke:var(--orange);stroke-width:2;filter:drop-shadow(0 0 7px rgba(233,106,43,.55))}
-.org .e.lit{stroke-opacity:1;stroke-width:2}
-.org.has-lit .n:not(.lit){opacity:.35}
-.org.has-lit .e:not(.lit){stroke-opacity:.1}
-@keyframes nodeIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
-@keyframes edgeIn{to{stroke-dashoffset:0}}
-.org-wrap.boot .n{animation:nodeIn .34s var(--ease) both;animation-delay:var(--d,0ms)}
-.org-wrap.boot .e{stroke-dasharray:var(--len,300);stroke-dashoffset:var(--len,300);opacity:1;
-  animation:edgeIn .5s var(--ease) both;animation-delay:var(--d,0ms)}
+   ⚠️ TOUT est gaté sur `.js .fold.in`. Sans JS : aucune animation ne part, et tout est déjà
+   là. C'est le sens qui prime — l'information n'est JAMAIS derrière le mouvement (et c'est
+   exactement le bug du 12/07 : la CSP avait tué le bootstrap, et 18 règles CSS avec).
+   `prefers-reduced-motion` est géré globalement (bloc en fin de fichier) : durée .01ms +
+   `both` → chaque animation saute directement à son état final. */
 
-.org-role{min-height:2.6rem;display:flex;align-items:center;font-size:var(--t-small);color:var(--ink-3);
-  padding:.65rem 1rem;background:var(--card);border-radius:var(--r-md);box-shadow:var(--edge)}
-.org-role b{color:var(--ink);font-weight:600}
+/* le dossier se pose — il arrive de plus haut et se redresse */
+.js .fold.in .fold__ico{animation:foldDrop .6s var(--ease) both}
+@keyframes foldDrop{
+  from{opacity:0;transform:translateY(-18px) rotate(-12deg) scale(.88)}
+  to{opacity:1;transform:translateY(0) rotate(-4deg) scale(1)}
+}
+/* la fenêtre SORT du dossier : l'origine du scale est le coin que le dossier recouvre,
+   sinon elle a l'air d'apparaître À CÔTÉ au lieu d'en être tirée. Le détail fait tout. */
+.fold__win{transform-origin:14% 0}
+.js .fold.in .fold__win{animation:winOut .58s var(--ease) both;animation-delay:.15s}
+@keyframes winOut{
+  from{opacity:0;transform:translateY(-12px) scale(.93)}
+  to{opacity:1;transform:none}
+}
+/* les lignes se déposent. `--i` = index GLOBAL, généré : les 6 pôles CONTINUENT la série
+   au lieu de repartir à 0 — deux cascades superposées se lisent comme un bug. */
+.js .fold.in .fw-r{animation:rowIn .3s var(--ease) both;
+  animation-delay:calc(.4s + var(--i,0) * 40ms)}
+@keyframes rowIn{from{opacity:0;transform:translateX(-9px)}to{opacity:1;transform:none}}
+
+/* Le rail DESCEND, maillon par maillon : c'est l'autorité qui s'écoule du co-CEO vers les 52.
+   Chaque segment part APRÈS la pastille dont il sort (+130ms) et arrive juste avant la
+   suivante — d'où la lecture « point → trait → point ». Un seul rail de haut en bas aurait
+   dit « il y a une ligne », pas « ça délègue ». */
+.js .fold.in .ch-i:not(:last-child)::after{animation:railDown .42s var(--ease) both;
+  animation-delay:calc(.55s + var(--j,0) * 145ms)}
+@keyframes railDown{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+/* chaque pastille éclot quand le rail l'atteint, et sa ligne suit 80ms après */
+.ch-i:nth-child(1){--j:0}
+.ch-i:nth-child(2){--j:1}
+.ch-i:nth-child(3){--j:2}
+.js .fold.in .ch-i::before{animation:dotPop .4s var(--ease) both;
+  animation-delay:calc(.42s + var(--j,0) * 145ms)}
+@keyframes dotPop{from{transform:scale(0)}to{transform:scale(1)}}
+.js .fold.in .ch-n,.js .fold.in .ch-t,.js .fold.in .ch-d{
+  animation:chIn .42s var(--ease) both;animation-delay:calc(.5s + var(--j,0) * 145ms)}
+@keyframes chIn{from{opacity:0;transform:translateX(11px)}to{opacity:1;transform:none}}
+
+/* la pile se dépose à son tour — `--i` généré, comme les lignes du Finder */
+.js .counts.in div{animation:rowIn .34s var(--ease) both;
+  animation-delay:calc(var(--i,0) * 55ms)}
+
+/* le prix arrive en dernier : c'est le point d'arrivée de toute la section */
+.js .tmpl.in .tmpl__price b{animation:pricePop .5s var(--ease) both;animation-delay:.18s}
+@keyframes pricePop{from{opacity:0;transform:scale(.82)}to{opacity:1;transform:none}}
+
+/* Les 6 capacités se déposent une à une. C'est du STAGING (web-motion) : six cartes qui
+   apparaissent d'un bloc se lisent comme un mur ; une à une, elles se lisent comme une
+   liste. Seule cascade ajoutée hors du dossier — « less is more », une bien placée bat
+   cinq floues. `--i` par nth-child : ces cartes sont écrites à la main, pas générées. */
+.can__i:nth-child(1){--i:0} .can__i:nth-child(2){--i:1} .can__i:nth-child(3){--i:2}
+.can__i:nth-child(4){--i:3} .can__i:nth-child(5){--i:4} .can__i:nth-child(6){--i:5}
+.js .system__head.in .can__i{animation:rowIn .38s var(--ease) both;
+  animation-delay:calc(.15s + var(--i,0) * 60ms)}
+
+@media(max-width:900px){
+  .fold{grid-template-columns:1fr;gap:1.75rem;justify-items:center}
+  .fold__art{width:min(360px,100%)}
+  .chain{width:100%;max-width:26rem}
+  .tmpl{grid-template-columns:1fr;justify-items:center;text-align:center}
+  .tmpl__l p{margin-inline:auto}
+  .tmpl__s{justify-content:center}
+  /* ⚠️ DOIT matcher la spécificité de `.system .tmpl .eyebrow` (0,3,0) : une media query
+     n'ajoute AUCUNE spécificité. Écrit `.tmpl .eyebrow` (0,2,0), il perdrait ici même. */
+  .system .tmpl .eyebrow{justify-content:center;width:100%}
+}
+
+/* Sous 400px, « 04_PLAYBOOKS_SOPS » (le plus long) se faisait rogner : 138px requis pour
+   104 disponibles. Un cran de corps en moins rend les 17 caractères — le nom d'un dossier
+   coupé sur une page qui vend « voilà exactement ce qu'il y a dedans », c'est le détail
+   qui décrédibilise tout le reste. */
+@media(max-width:400px){
+  .fw-p{font-size:.75rem}
+  .fw-m{font-size:.6875rem}
+  .fw-r{gap:.4rem;padding:.42rem .45rem}
+}
+
+
+/* ══ ORG-TREE — l'arbre complet, en texte, invisible ═══════════════════════════
+   Tout ce qui reste de l'ancien diagramme : `gen_org_svg.py` l'émet depuis la même carte
+   validée. Les humains lisent le DOSSIER (les 6 pôles y sont ouverts) ; les lecteurs
+   d'écran et les crawlers LLM lisent cet arbre-ci. C'était déjà la moitié qui rapportait —
+   et le meilleur coup AEO de la page.
+   ⛔ `sr-only` = visible dans l'arbre d'accessibilité, donc FOCUSABLE : jamais d'élément
+   interactif ici (leçon du 16/07 : 11 <summary> de 1×28px captaient le focus dans le vide). */
+.org-tree{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
 .system__bridge{margin-top:2.25rem;padding-top:1.75rem;border-top:1px solid var(--hairline);
   display:flex;flex-wrap:wrap;gap:1rem 2rem;align-items:center;justify-content:center;
@@ -512,7 +739,13 @@ p .acc, p .acc-s, li .acc, li .acc-s{color:var(--orange-txt)}
   transform:translateY(110%);transition:transform .3s var(--ease)}
 .bar.up{transform:none}
 .bar .btn{width:100%;justify-content:center}
-@media(max-width:720px){.bar{display:block}.foot{padding-bottom:6.5rem}}
+/* ⚠️ LE MÊME SEUIL QUE `.nav .btn` (620px), ET CE N'EST PAS UN HASARD : la barre existe
+   EXACTEMENT quand le CTA de la nav n'existe pas. Elle était à 720 pendant que la nav
+   coupait à 620 → mesuré entre 621 et 720px : DEUX boutons « Suis le build » identiques
+   à l'écran en même temps, l'un en haut, l'autre collé en bas. Un CTA dupliqué ne double
+   pas la conversion, il dit au visiteur qu'on ne sait pas où l'on veut l'emmener.
+   Un seul CTA orange par vue — la règle du DS s'applique aussi entre deux media queries. */
+@media(max-width:620px){.bar{display:block}.foot{padding-bottom:6.5rem}}
 
 /* ═══ Reveal ═══ */
 .js .rv{opacity:0;transform:translateY(16px)}
@@ -537,8 +770,6 @@ p .acc, p .acc-s, li .acc, li .acc-s{color:var(--orange-txt)}
      la règle qui les escamote (.js .ul[data-draw] path), sinon il perdrait la
      cascade et le trait resterait invisible — l'info n'est jamais derrière le mouvement. */
   .js .ul[data-draw] path,.js .cr[data-draw] path,.ul path,.cr path{stroke-dashoffset:0}
-  .js .org-wrap.is-idle .n,.js .org-wrap.is-idle .e{opacity:1}
-  .org-wrap.boot .e{stroke-dashoffset:0}
   .js .float{animation:none}
   .grain{display:none}
 }
@@ -564,6 +795,20 @@ p .acc, p .acc-s, li .acc, li .acc-s{color:var(--orange-txt)}
    ou orange, ils se noieraient. La pastille les isole et les rend nets partout. */
 .social .i--brand{width:26px;height:26px;padding:3px;background:#fff;border-radius:7px}
 .social--soon .i--brand{filter:grayscale(1)}   /* un logo en couleurs dirait "c'est ouvert" */
+
+/* ── Les 4 réseaux sont ouverts depuis le 16/07 (avant : 1 lien + 3 « bientôt »), et à 4
+   pastilles pleines la rangée ne tient plus. Mesuré à 390px : Instagram 145 + YouTube 133
+   + gap 8.8 = 286.8 pour 286 disponibles — ça casse pour HUIT DIXIÈMES de pixel, et se
+   répartit en 1+2+1. Deux orphelins, soit exactement ce que la note de `.socials` interdit :
+   « un bouton orphelin se lit comme une erreur, pas comme une hiérarchie. »
+   On ne rogne pas la typo pour gagner 1px (ça se re-casserait au prochain libellé) : on
+   change de modèle. Grille 2×2, symétrique par construction, cibles plus larges au pouce.
+   Seuil 680px = la largeur mesurée sous laquelle les 4 cessent de tenir sur une ligne.
+   `max-width` : sans lui, à 680px, deux pastilles de 275px de large. */
+@media(max-width:680px){
+  .socials{display:grid;grid-template-columns:1fr 1fr;max-width:24rem;margin-inline:auto}
+  .social{justify-content:center}
+}
 
 /* le premier réseau = l'orange plein (UN seul CTA orange par vue)
    ⚠️ texte ANTHRACITE, pas blanc : #fff sur #E96A2B = 3,20:1 → ÉCHEC AA sur du 15,7px.
