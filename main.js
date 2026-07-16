@@ -83,6 +83,35 @@
     compteurs.forEach(n => io.observe(n));
   }
 
+  /* ---- Le dossier répond au curseur --------------------------------------
+     C'est un OBJET : ce qui le prouve, c'est qu'il bouge quand on bouge. Le delta
+     part sur `.fi-t` uniquement — il s'AJOUTE au repos de `.fi-o` sans jamais
+     toucher la fenêtre ni son texte (règle : l'objet porte la 3D, pas la donnée).
+     Trois garde-fous : pas de pointeur fin (mobile) → rien ; reduced-motion → rien ;
+     et une frame par rAF max, sinon `pointermove` écrit 200 fois par seconde. */
+  const scene = document.querySelector('.fold__ico');
+  const objet = scene && scene.querySelector('.fi-t');
+  const zone = scene && scene.closest('.fold');
+  if (objet && zone && !REDUCED && matchMedia('(hover:hover) and (pointer:fine)').matches) {
+    let raf = 0, rx = 0, ry = 0;
+    const pose = () => {
+      raf = 0;
+      objet.style.setProperty('--px', rx.toFixed(2) + 'deg');
+      objet.style.setProperty('--py', ry.toFixed(2) + 'deg');
+    };
+    const vise = () => { if (!raf) raf = requestAnimationFrame(pose); };
+    zone.addEventListener('pointermove', (e) => {
+      const r = zone.getBoundingClientRect();
+      // Bornes serrées (±5°/±3,5°) : au-delà, le rabat quitte visiblement le dos et
+      // l'objet se démonte. On suggère la parallaxe, on ne fait pas tourner un jouet.
+      ry = ((e.clientX - r.left) / r.width - .5) * 10;
+      rx = (.5 - (e.clientY - r.top) / r.height) * 7;
+      vise();
+    });
+    // Le curseur part → l'objet revient au repos. Sinon il reste tordu pour toujours.
+    zone.addEventListener('pointerleave', () => { rx = ry = 0; vise(); });
+  }
+
   /* ---- Barre CTA mobile --------------------------------------------------- */
   const bar = document.getElementById('bar');
   const hero = document.querySelector('.hero');

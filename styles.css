@@ -424,10 +424,47 @@ p .acc, p .acc-s, li .acc, li .acc-s{color:var(--orange-txt)}
   gap:clamp(1.5rem,4vw,3.5rem);align-items:center;margin-bottom:1.75rem}
 
 .fold__art{position:relative;display:grid;justify-items:center}
-.fold__ico{justify-self:start;width:44%;max-width:178px;height:auto;display:block;
-  margin-left:6%;margin-bottom:-24px;position:relative;z-index:1;
-  transform:rotate(-4deg);transform-origin:bottom center;
-  filter:drop-shadow(0 13px 18px rgba(20,48,86,.24))}
+/* ═══ LE DOSSIER — un OBJET, pas une icône ═════════════════════════════════════
+   ⚠️ LA SCÈNE 3D COMMENCE ET S'ARRÊTE À `.fold__ico`. `.fold__art` n'en fait PAS
+   partie, et c'est délibéré : dans un contexte 3D les frères ne s'empilent plus par
+   `z-index` mais par PROFONDEUR — la fenêtre passerait devant ou derrière selon son
+   translateZ, et ses 12 lignes de 13px prendraient la perspective avec elles.
+   L'objet porte la 3D ; la donnée reste dans le plan de l'écran, nette.
+   ⚠️ AUCUN `filter`/`opacity<1`/`overflow` sur `.fi-o` ni `.fi-t` : ces propriétés
+   forcent `transform-style` à `flat` — la scène s'aplatirait EN SILENCE (le rabat
+   garderait son translateZ dans le code et ne serait plus devant rien à l'écran).
+   Les ombres vivent donc sur les FACES, qui n'ont aucun enfant 3D à perdre. */
+.fold__ico{justify-self:start;position:relative;z-index:1;
+  width:44%;max-width:178px;aspect-ratio:248/200;
+  margin-left:6%;margin-bottom:-24px;
+  /* Objet à GAUCHE, caméra au centre de la page → on voit sa face droite (rotateY
+     négatif). Un point de fuite décalé à droite, c'est la même caméra pour l'objet
+     et pour la page — sinon il a l'air collé, pas posé. */
+  perspective:620px;perspective-origin:76% 34%}
+/* L'objet. Son transform de REPOS doit être au degré près le `to` de foldTurn :
+   sans JS il n'y a pas d'animation, c'est ce repos-là qu'on voit — les deux doivent
+   dire la même chose, sinon la page a deux vérités. */
+.fi-o{position:absolute;inset:0;transform-style:preserve-3d;
+  transform:rotateX(7deg) rotateY(-21deg) rotateZ(-3deg)}
+/* Le delta du pointeur, sur SON plan. Fusionné avec `.fi-o`, `fill-mode:both`
+   gèlerait le transform sur le dernier keyframe et le curseur ne dirait plus rien.
+   La transition longue EST le poids de l'objet : il suit, il ne colle pas. */
+.fi-t{position:absolute;inset:0;transform-style:preserve-3d;
+  transform:rotateX(var(--px,0deg)) rotateY(var(--py,0deg));
+  transition:transform .35s var(--ease)}
+.fi-p{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* le dos porte l'ombre au sol de tout l'objet — c'est la face qui touche la table */
+.fi-b{filter:drop-shadow(0 14px 17px rgba(20,48,86,.26))}
+/* Le rabat vit 22px DEVANT le dos — c'est ce vide qui fait l'objet : à 21° il se
+   décale de ~12px et grossit de 2,6%, donc le dos DÉPASSE de 7px à droite. Un
+   dossier plat ne fait jamais ça.
+   ⚠️ Le translateZ seul ne suffisait pas (mesuré au rendu) : deux plans PARALLÈLES
+   se lisent comme un décalage, pas comme un dossier. Le `rotateX` charnière-en-bas
+   l'OUVRE — c'est ce dernier degré qui fait la différence entre un objet déplacé et
+   un objet qu'on ouvre. L'ordre compte : translateZ d'abord (le rabat part devant),
+   la charnière ensuite (elle pivote À 22px, pas à zéro). */
+.fi-f{transform:translateZ(22px) rotateX(-10deg);transform-origin:bottom center;
+  filter:drop-shadow(-3px 7px 8px rgba(14,40,76,.32))}
 .fold__win{position:relative;z-index:2;width:100%;background:var(--card);
   border-radius:var(--r-md);box-shadow:var(--edge),var(--shadow-lg);overflow:hidden}
 .fw-bar{display:flex;align-items:center;justify-content:space-between;gap:1rem;
@@ -535,11 +572,20 @@ p .acc, p .acc-s, li .acc, li .acc-s{color:var(--orange-txt)}
    `prefers-reduced-motion` est géré globalement (bloc en fin de fichier) : durée .01ms +
    `both` → chaque animation saute directement à son état final. */
 
-/* le dossier se pose — il arrive de plus haut et se redresse */
-.js .fold.in .fold__ico{animation:foldDrop .6s var(--ease) both}
+/* Le dossier se pose — il arrive de plus haut ET DE PLUS LOIN, en pivotant vers nous.
+   ⚠️ DEUX couches, jamais une : l'opacité reste sur `.fold__ico` (perspective, pas
+   preserve-3d), la ROTATION va sur `.fi-o`. Fusionnées, l'`opacity:0` du premier
+   keyframe aplatirait la scène pendant TOUTE l'animation — le rabat se recollerait au
+   dos, puis décollerait d'un coup à la dernière frame. Le pop se voit, la cause non. */
+.js .fold.in .fold__ico{animation:foldDrop .72s var(--ease) both}
 @keyframes foldDrop{
-  from{opacity:0;transform:translateY(-18px) rotate(-12deg) scale(.88)}
-  to{opacity:1;transform:translateY(0) rotate(-4deg) scale(1)}
+  from{opacity:0;transform:translateY(-20px)}
+  to{opacity:1;transform:none}
+}
+.js .fold.in .fi-o{animation:foldTurn .72s var(--ease) both}
+@keyframes foldTurn{
+  from{transform:rotateX(22deg) rotateY(-52deg) rotateZ(-3deg) scale(.9)}
+  to{transform:rotateX(7deg) rotateY(-21deg) rotateZ(-3deg) scale(1)}
 }
 /* la fenêtre SORT du dossier : l'origine du scale est le coin que le dossier recouvre,
    sinon elle a l'air d'apparaître À CÔTÉ au lieu d'en être tirée. Le détail fait tout. */
