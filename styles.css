@@ -81,7 +81,17 @@
   --edge:inset 0 0 0 1px var(--hairline);
   --ring:0 0 0 4px rgba(233,106,43,.30);
 
-  --gut:clamp(1.25rem,4vw,2.5rem);
+  /* ⚠️ La gouttière était `4vw` — mais 4vw ne DÉPASSE 20px qu'au-delà de 500px de large.
+     Autrement dit, sur TOUS les téléphones, le terme vw ne servait à rien : le plancher
+     décidait seul et la marge valait 20px de 320 à 500px. Une marge fixe sur du variable,
+     c'est-à-dire pas une marge fluide du tout (retour Tobias 16/07 : « pas hyper joli »).
+     `7vw` rend la pente au mobile : 320→22,4px · 390→27,3px (+36 %) · 430→30px, et le
+     plafond 2,5rem tient le desktop exactement où il était. Les petits écrans gagnent le
+     moins — c'est voulu, c'est eux qui ont besoin de leur largeur de contenu.
+     ⚠️ Toute hausse ici se paie sur les noms du Finder (colonne `minmax(0,1fr)`, elle
+     rétrécit 1:1). Réserve mesurée au pire cas (320px, `04_PLAYBOOKS_SOPS`) : 37,7px,
+     soit ~18px par côté. On en prend 2,4. À re-mesurer avant d'y retoucher. */
+  --gut:clamp(1.25rem,7vw,2.5rem);
   --max:1120px;
   --ease:cubic-bezier(.16,1,.3,1);
 }
@@ -543,21 +553,61 @@ p .acc, p .acc-s, li .acc, li .acc-s{color:var(--orange-txt)}
 /* LE TEMPLATE — le produit. ⚠️ Pas de .btn--primary ici : la barre collante en porte déjà
    un, et deux CTA orange simultanés = deux CTA (défaut corrigé le 16/07). --ghost était du
    code MORT (défini, jamais utilisé) : il reprend du service au lieu d'un 3e bouton. */
+/* ⚠️ FONCÉ, comme le slate final (retour Tobias 16/07 : « le même type de branding que le
+   dernier slate »). Ce n'est pas une couleur, c'est une GRAMMAIRE : sur cette page le foncé
+   veut dire « ce que je vends ». Le slate de fin le disait déjà seul ; maintenant les deux
+   blocs commerciaux parlent la même langue, et le clair redevient ce qu'il doit être — ce
+   que je RACONTE.
+   ⚠️ On RÉUTILISE le système du slate (--night · le voile de points · la rampe
+   rgba(251,247,240,…) · l'orange qui repasse en version claire), on ne fabrique pas un
+   foncé qui lui ressemble : deux noirs différents à deux endroits, ça se lit comme un bug
+   sans que personne sache dire pourquoi. */
 .tmpl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1.25rem 2.5rem;
-  align-items:center;background:var(--card);border-radius:var(--r-lg);
-  padding:clamp(1.35rem,3vw,2rem);box-shadow:var(--edge),var(--shadow-sm);
-  margin-bottom:2rem;text-align:left}
+  align-items:center;background:var(--night);color:var(--ink-on-dark);
+  border-radius:var(--r-xl);padding:clamp(1.6rem,3.4vw,2.4rem);
+  box-shadow:var(--shadow-xl);margin-bottom:2rem;text-align:left;
+  position:relative;overflow:hidden}
+/* Le voile de points — celui du slate final au pixel près : la trame des sections claires,
+   inversée. C'est la signature, pas un fond. */
+.tmpl::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle,rgba(251,247,240,.07) 1px,transparent 1px);
+  background-size:22px 22px}
+/* ⚠️ Le voile est en position:absolute AU-DESSUS : sans ça le contenu passe dessous. */
+.tmpl > *{position:relative}
+/* La rampe de texte sur foncé : les alphas du slate, pas des gris improvisés. */
+.tmpl h3{color:var(--ink-on-dark)}
+.tmpl .eyebrow{color:rgba(251,247,240,.55)}
+.tmpl .eyebrow::before{background:var(--orange)}
+/* ⚠️ --orange-acc est calibré pour du texte sur CLAIR (il y tient 3,91:1). Sur --night il
+   s'éteint : c'est --orange qui porte — exactement la règle de `.offer__card p .acc`. */
+.tmpl .acc{color:var(--orange)}
+/* Ghost sur foncé : `--card` en ferait un bouton BLANC PLEIN, donc plus fort que le vrai
+   CTA du slate vers lequel il pointe — un teaser ne crie pas plus fort que l'offre.
+   Surface sur foncé = l'idiome maison (cf. `.offer__form input`). */
+.tmpl .btn--ghost{background:rgba(251,247,240,.08);color:var(--ink-on-dark);
+  box-shadow:inset 0 0 0 1px rgba(251,247,240,.22)}
+.tmpl .btn--ghost:hover{background:rgba(251,247,240,.14);
+  box-shadow:inset 0 0 0 1px rgba(251,247,240,.34),var(--shadow-md)}
 /* `.system .eyebrow` centre TOUS les eyebrows de la section — mais cette carte-ci est ferrée
    à gauche. Sans ça : un eyebrow centré au-dessus d'un titre ferré à gauche. (0,2,1) bat (0,2,0). */
 .system .tmpl .eyebrow{justify-content:flex-start;width:auto}
 .tmpl h3{font-size:var(--t-h3);line-height:var(--lh-snug);margin:.3rem 0 .55rem}
-.tmpl__l p{font-size:var(--t-body);color:var(--ink-2);max-width:54ch}
-.tmpl__s{display:flex;align-items:center;gap:.5rem;margin-top:.85rem;
-  font-size:var(--t-small);color:var(--ink-3)}
+.tmpl__l p{font-size:var(--t-body);color:rgba(251,247,240,.74);max-width:54ch}
+/* ⚠️ « En construction » est l'honnêteté de ce bloc, pas une mention légale : elle se lit à
+   .62, pas au .45 du micro-texte du slate. Un aveu qu'on doit plisser les yeux pour lire
+   n'est pas un aveu.
+   ⚠️ La pastille était un item flex avec `align-items:center` : elle se centrait donc sur le
+   BLOC de texte. Dès que la phrase passe à 2 lignes — c'est-à-dire sur TOUT le mobile — elle
+   tombait 14px trop bas (mesuré) et se retrouvait larguée à gauche d'un texte centré. C'est
+   exactement le bug déjà nommé plus haut pour le tiret de `.eyebrow` ; il était juste
+   invisible sur blanc. En INLINE, elle suit son premier mot, quel que soit le nombre de
+   lignes — le centrage vient de `text-align`, hérité de `.tmpl` sur mobile. */
+.tmpl__s{margin-top:.85rem;font-size:var(--t-small);color:rgba(251,247,240,.62)}
+.tmpl__s .dot{display:inline-block;vertical-align:middle;margin-right:.5rem;position:relative;top:-1px}
 .tmpl__r{display:grid;gap:.85rem;justify-items:center}
 .tmpl__price{display:grid;justify-items:center;gap:.1rem}
 .tmpl__price b{font-size:2.5rem;font-weight:800;letter-spacing:var(--tr-tight);line-height:1}
-.tmpl__price span{font-size:var(--t-caption);color:var(--ink-3)}
+.tmpl__price span{font-size:var(--t-caption);color:rgba(251,247,240,.62)}
 
 /* ═══ MOTION — § LE SYSTÈME ══════════════════════════════════════════════════════
    Skill `web-motion` : composited ONLY (transform/opacity — jamais top/left/width/height),
@@ -642,7 +692,9 @@ p .acc, p .acc-s, li .acc, li .acc-s{color:var(--orange-txt)}
   .chain{width:100%;max-width:26rem}
   .tmpl{grid-template-columns:1fr;justify-items:center;text-align:center}
   .tmpl__l p{margin-inline:auto}
-  .tmpl__s{justify-content:center}
+  /* (`.tmpl__s{justify-content:center}` retiré : la ligne n'est plus un flex — elle se
+     centre par `text-align`, hérité de `.tmpl`. Une règle qui ne s'applique à rien est
+     une règle qui ment sur ce qui tient la mise en page.) */
   /* ⚠️ DOIT matcher la spécificité de `.system .tmpl .eyebrow` (0,3,0) : une media query
      n'ajoute AUCUNE spécificité. Écrit `.tmpl .eyebrow` (0,2,0), il perdrait ici même. */
   .system .tmpl .eyebrow{justify-content:center;width:100%}
@@ -754,7 +806,13 @@ p .acc, p .acc-s, li .acc, li .acc-s{color:var(--orange-txt)}
 .offer__card h2{color:var(--ink-on-dark);margin-bottom:1rem}
 .offer__body{color:rgba(251,247,240,.72);margin-bottom:2rem;max-width:46ch;margin-inline:auto}
 .offer__action{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center}
-.offer__micro{margin-top:1.1rem;font-size:var(--t-caption);color:rgba(251,247,240,.45)}
+/* ⚠️ Était à .45 → 4,31:1 sur --night, MESURÉ : échec AA pour du 13px (seuil 4,5). Dette
+   trouvée le 16/07 en passant le template en foncé — l'audit précédent ne testait que 74
+   éléments et ne la voyait pas ; celui-ci en teste 240. Sur un fond sombre, un alpha coûte
+   plus cher que l'œil ne le croit : .45 sur du noir n'est pas « discret », c'est illisible
+   pour qui n'a pas 20/20. .56 → 6,02:1 (mesuré au rendu), et le texte reste tout aussi
+   secondaire à l'œil. */
+.offer__micro{margin-top:1.1rem;font-size:var(--t-caption);color:rgba(251,247,240,.56)}
 .offer__form{display:flex;flex-wrap:wrap;gap:.75rem;width:100%}
 .offer__form input{flex:1 1 15rem;font-family:var(--font-sans);font-size:1rem;padding:.95rem 1.3rem;
   border:0;border-radius:var(--r-pill);background:rgba(251,247,240,.08);color:var(--ink-on-dark);

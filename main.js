@@ -42,14 +42,29 @@
     io.observe(el);
   });
 
-  /* ---- Navbar collante --------------------------------------------------- */
+  /* ---- Navbar collante ----------------------------------------------------
+     ⚠️ RÉPARÉE le 16/07 — elle n'a JAMAIS collé, à aucun scroll, depuis le début.
+     La sentinelle observée était `#top`, c'est-à-dire le <main> ENTIER (8888px de haut).
+     Or un IntersectionObserver ne rappelle QUE quand l'état d'intersection change — et un
+     élément qui couvre toute la page intersecte toujours. Le callback tombait donc une
+     seule fois, au chargement, avec `boundingClientRect.top === 0` → `0 < 0` = false.
+     Résultat : `.stuck` jamais posée, une nav `position:fixed` sans aucun fond par-dessus
+     le contenu, et le logo qui chevauchait le texte. Le CSS `.nav.stuck` (fond + flou +
+     liseré) existait et n'a jamais servi — le code disait qu'elle collait, elle ne collait
+     pas. Rien ne hurlait : ni erreur, ni warning.
+     Une sentinelle doit être PETITE et EN HAUT : c'est sa SORTIE qui est l'événement. */
   const nav = document.getElementById('nav');
-  const top = document.getElementById('top');
-  if (nav && top) {
-    const io = new IntersectionObserver(([e]) => {
-      nav.classList.toggle('stuck', e.boundingClientRect.top < 0);
-    }, { threshold: 0, rootMargin: '-72px 0px 0px 0px' });
-    io.observe(top);
+  if (nav) {
+    const sentinelle = document.createElement('div');
+    sentinelle.setAttribute('aria-hidden', 'true');
+    // 80px ≈ la hauteur de la nav : elle se solidifie pile quand du contenu passerait dessous.
+    // `append` et pas `prepend` : on ne s'insère pas en premier enfant de <body>, un
+    // sélecteur :first-child ailleurs n'a pas à connaître notre existence.
+    sentinelle.style.cssText = 'position:absolute;top:0;left:0;width:1px;height:80px;pointer-events:none';
+    document.body.append(sentinelle);
+    new IntersectionObserver(([e]) => {
+      nav.classList.toggle('stuck', !e.isIntersecting);
+    }, { threshold: 0 }).observe(sentinelle);
   }
 
   /* ---- Les chiffres se COMPTENT ------------------------------------------
