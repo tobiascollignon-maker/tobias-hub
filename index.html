@@ -265,22 +265,12 @@
         <!--COUNTS:START--><div style="--i:0"><b>159</b><span>skills maison</span></div><div style="--i:1"><b>21</b><span>knowledge bases</span></div><div style="--i:2"><b>6</b><span>serveurs MCP</span></div><div style="--i:3"><b>40</b><span>SOP</span></div><div style="--i:4"><b>16</b><span>commandes</span></div><!--COUNTS:END-->
       </div>
 
-      <!-- LE TEMPLATE — ⛔ BLOC GÉNÉRÉ, ne l'édite pas ici : il sera écrasé.
-           Source unique : scripts/gen_org_svg.py § tmpl_html(). Le prix, le CTA et TOUS les
-           chiffres du contenu vendu y vivent, à un seul endroit.
-
-           ⚠️ POURQUOI IL EST GÉNÉRÉ (17/07). La copie disait « Le même dossier. Vide, et prêt
-           pour ton métier » — juste SOUS la bande qui annonce 159 skills / 21 KB, et sous
-           « 52 agents ». Le visiteur lisait donc : 7,99 € et je reçois tout ça. C'est faux :
-           mes agents font du web design en Belgique, ils ne serviraient à personne d'autre.
-           `LEAD_MAGNETS_REGISTRY.yml` avait déjà le mot exact : bait-and-switch. Les chiffres
-           du bloc sont maintenant COMPTÉS dans le dossier réellement vendu
-           (stack_census.template_census()) : la page ne PEUT plus promettre ce que le zip ne
-           contient pas. Les 52 restent au-dessus, à leur vraie place — ma preuve, pas l'offre.
-
-           ⛔ Le CTA reste « Préviens-moi » tant que LIEN_ACHAT_TEMPLATE est None. Un bouton
-           « Acheter » qui ne vend rien est un mensonge. Garde-fou 0-client toujours actif :
-           aucun témoignage, aucun logo, aucun chiffre de résultat. -->
+      <!-- ⛔ BLOC GÉNÉRÉ — ne l'édite pas ici, il sera écrasé au prochain run.
+           Source unique : scripts/gen_org_svg.py § tmpl_html(), où vivent le prix, le CTA et
+           les chiffres. Ceux-ci sont COMPTÉS dans le dossier réellement vendu : la page ne
+           peut pas promettre ce que le zip ne contient pas, et le build casse s'il devient
+           incomptable. Le CTA ne peut pas devenir un bouton d'achat tant que le lien de
+           paiement n'existe pas. Raisonnement : 02_STATE/projects/low_ticket_template/. -->
       <aside class="tmpl rv" aria-labelledby="h-tmpl">
         <!--TMPL:START--><div class="tmpl__l"><p class="eyebrow">Le template</p><h3 id="h-tmpl">Pas mes 52 agents. <span class="acc">L'architecture</span> qui les tient.</h3><p>Mes agents font du web design en Belgique — ils ne te serviraient à rien. Ce que tu prends, c’est le squelette : les dossiers, la hiérarchie, les 6 règles et le raisonnement derrière chacune. Plus un jeu de départ qui tourne dès la première session — 8 agents · 4 skills · 3 knowledge bases · 2 SOP · 4 commandes. Et un questionnaire qui le remplit à ton business avant ton premier prompt.</p><p class="tmpl__s"><span class="dot"></span>En construction. Je le monte en public, comme le reste.</p></div><div class="tmpl__r"><p class="tmpl__price"><b>7,99 €</b><span>au lancement</span></p><a class="btn btn--ghost" href="#offer">Préviens-moi <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></div><!--TMPL:END-->
       </aside>
